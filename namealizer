@@ -1,0 +1,14 @@
+#! /usr/bin/python3
+
+import argparse
+
+def main():
+	program_description = "Takes user inputs and returns a random collection of words."
+	parser = argparse.ArgumentParser(description=program_description)
+	parser.add_argument('--dict', 
+				help="Specify a non-default word dictionary to use. Currently non-functional",
+				metavar="Dictionary")
+	 
+
+if __name__ == '__main__':
+	main()
