@@ -2,6 +2,7 @@
 # Imports
 import argparse
 import os
+import sys
 import random
 import string
 
@@ -18,7 +19,48 @@ def format_string(string_to_format, desired_format):
     Takes an unformatted string and returns it in the desired format
     Acceptable formats are defined in the FORMATS list.
     '''
-    pass
+    
+    # Split the string into a list of words to make it easier to operate on
+    words = string_to_format.split()
+
+    # Do some error checking on desired_format
+    desired_format = desired_format.lower()
+    good_to_go = False
+    if desired_format in FORMATS:
+        good_to_go = True
+    
+    string_to_return = ""
+    if good_to_go == True and desired_format == 'lowercase':
+        for word in words:
+            string_to_return += "{} ".format(word.lower())
+        return string_to_return
+
+    if good_to_go == True and desired_format == 'uppercase':
+        for word in words:
+            string_to_return += "{} ".format(word.upper())
+        return string_to_return
+
+    if good_to_go == True and desired_format == 'capitalized':
+        for word in words:
+            string_to_return += "{} ".format(word.capitalize())
+        return string_to_return
+
+    if good_to_go == True and desired_format == 'mixedcase':
+        first_word = True
+        for word in words:
+            if first_word: 
+                string_to_return += "{}".format(word.lower())
+                first_word = False
+            else:
+                string_to_return += "{}".format(word.capitalize())
+        return string_to_return
+    
+    if good_to_go == True and desired_format == 'camelcase':
+        for word in words:
+            string_to_return += "{}".format(word.capitalize())
+        return string_to_return
+
+    else: return string_to_format
 
 def get_random_word_from_letter(dictionary, starting_letter):
     '''
@@ -82,15 +124,26 @@ def main():
         type=int)
     parser.add_argument('-f', '--format',
         help="Specify the format of the returned word list.")
+    parser.add_argument('-v', '--verbose',
+        help="""Make the program print extra information, can be useful
+                especially if you would like to know what seed was used
+                for the random number generator.""",
+        action='store_true')
     args = parser.parse_args()
     
     # Define special variables for use in main
+    # Seed the PRNG
+    seed = None
     if args.seed == None:
         # Generate seed for random number generator
         random.seed()
+        seed = random.randint(0, sys.maxsize)
+        random.seed(a = seed)
     else:
         random.seed(a = args.seed)
-    
+        seed = args.seed
+    if args.verbose: print("Seed used: {}".format(seed)) 
+
     # Open the file for the word list and read it into a nested list
     f = open("/usr/share/namealizer/all_en_US.dict")
     try:
@@ -98,15 +151,18 @@ def main():
 
     finally:
         f.close()
-
+    string_to_print = ""
     if args.count != None:
-        string_to_print = ""
         for index in range(args.count):
             string_to_print += "{} ".format(get_random_word(dictionary))
-        print(string_to_print)
-
+    else:
+        string_to_print = "{} {}".format(get_random_word(dictionary), get_random_word(dictionary))
+    if args.format != None:
+        string_to_print = format_string(string_to_print, args.format)
     else:
         print(get_random_word(dictionary), get_random_word(dictionary))
+    
+    print(string_to_print)
 
 if __name__ == '__main__':
 	main()
