@@ -7,6 +7,18 @@ import string
 
 # Define global constants
 NUM_LETTER_GROUPS = 26  # Number of letters in the alphabet being used
+FORMATS = ['lowercase', 'uppercase', 'capitalized', 'mixedcase', 'camelcase',
+            'hyphenated-lowercase', 'hyphenated-uppercase', 'hyphenated-capitalized',
+            'hyphenated-mixedcase', 'hyphenated-camelcase', 'underscored-lowercase',
+            'underscored-uppercase', 'underscored-capitalized', 
+            'underscored-mixedcase', 'underscored-camelcase']
+
+def format_string(string_to_format, desired_format):
+    '''
+    Takes an unformatted string and returns it in the desired format
+    Acceptable formats are defined in the FORMATS list.
+    '''
+    pass
 
 def get_random_word_from_letter(dictionary, starting_letter):
     '''
@@ -80,7 +92,7 @@ def main():
         random.seed(a = args.seed)
     
     # Open the file for the word list and read it into a nested list
-    f = open("all_en_US.dict")
+    f = open("/usr/share/namealizer/all_en_US.dict")
     try:
         dictionary = import_dictionary(f)    
 
