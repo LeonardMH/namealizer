@@ -73,12 +73,11 @@ def main():
     args = parser.parse_args()
     
     # Define special variables for use in main
-    seed = None # DEBUG
-    if seed == None:
+    if args.seed == None:
         # Generate seed for random number generator
         random.seed()
     else:
-        random.seed(a = seed)
+        random.seed(a = args.seed)
     
     # Open the file for the word list and read it into a nested list
     f = open("all_en_US.dict")
@@ -87,9 +86,15 @@ def main():
 
     finally:
         f.close()
- 
-    # DEBUG Currently just assume default functionality
-    print(get_random_word(dictionary), get_random_word(dictionary))
+
+    if args.count != None:
+        string_to_print = ""
+        for index in range(args.count):
+            string_to_print += "{} ".format(get_random_word(dictionary))
+        print(string_to_print)
+
+    else:
+        print(get_random_word(dictionary), get_random_word(dictionary))
 
 if __name__ == '__main__':
 	main()
