@@ -6,4 +6,5 @@
 sudo cp namealizer /usr/bin/
 
 # Copy the dictionary into /usr/share/namealizer
+sudo mkdir /usr/share/namealizer
 sudo cp all_en_US.dict /usr/share/namealizer
