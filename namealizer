@@ -157,10 +157,9 @@ def main():
             string_to_print += "{} ".format(get_random_word(dictionary))
     else:
         string_to_print = "{} {}".format(get_random_word(dictionary), get_random_word(dictionary))
+
     if args.format != None:
         string_to_print = format_string(string_to_print, args.format)
-    else:
-        print(get_random_word(dictionary), get_random_word(dictionary))
     
     print(string_to_print)
 
