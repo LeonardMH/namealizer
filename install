@@ -1,0 +1,9 @@
+#! /bin/bash
+# A simple install script for the namealizer utility
+# Requires super user permissions
+
+# Copy the python script into /usr/bin/
+sudo cp namealizer /usr/bin/
+
+# Copy the dictionary into /usr/share/namealizer
+sudo cp all_en_US.dict /usr/share/namealizer
