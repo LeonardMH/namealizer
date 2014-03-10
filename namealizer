@@ -1,14 +1,95 @@
 #! /usr/bin/python3
-
+# Imports
 import argparse
+import os
+import random
+import string
+
+# Define global constants
+NUM_LETTER_GROUPS = 26  # Number of letters in the alphabet being used
+
+def get_random_word_from_letter(dictionary, starting_letter):
+    '''
+    Takes the desired starting letter, and the dictionary to read from
+    and returns a random word beginning with that letter
+    '''
+    # Map the starting letter to the dictionary index
+    index = 0
+    for letter in string.ascii_lowercase:
+        if letter == starting_letter:
+            letter_group = index
+            break
+        else:
+            index += 1
+
+    # DEBUG For now just return the first word in that group
+    return dictionary[letter_group][0]
+        
+def get_random_word(dictionary, starting_letter = None):
+    '''
+    Takes the dictionary to read from and returns a random word
+    optionally accepts a starting letter
+    '''
+    if starting_letter == None:
+        starting_letter = random.randint(0, NUM_LETTER_GROUPS - 1)
+    word_index = random.randint(0, len(dictionary[starting_letter]) - 1)
+    return dictionary[starting_letter][word_index]
+
+def import_dictionary(opened_file):
+    '''
+    Function used to import the dictionary file into memory
+    opened_file should be an already opened dictionary file
+    '''
+    # Create the dictionary to hold the words
+    dictionary = []
+    for index in range(NUM_LETTER_GROUPS):
+        dictionary.append([])
+    
+    index = -1 
+    for line in opened_file:
+        if line is "\n": 
+            index += 1
+        else: 
+            dictionary[index].append(line.rstrip())
+
+    return dictionary
 
 def main():
-	program_description = "Takes user inputs and returns a random collection of words."
-	parser = argparse.ArgumentParser(description=program_description)
-	parser.add_argument('--dict', 
-				help="Specify a non-default word dictionary to use. Currently non-functional",
-				metavar="Dictionary")
-	 
+    # Parse the input arguments
+    program_description = "Takes user inputs and returns a random collection of words."
+    parser = argparse.ArgumentParser(description=program_description)
+    parser.add_argument('-d', '--dictionary', 
+        help="Specify a non-default word dictionary to use. Currently non-functional")
+    parser.add_argument('-c', '--count',
+        help="Specify the number of words to return.",
+        type=int)
+    parser.add_argument('-i', '--initials',
+        help="Give a string of letters to form the word list from")
+    parser.add_argument('-s', '--seed',
+        help="Specify the seed to use for the random number generator.",
+        type=int)
+    parser.add_argument('-f', '--format',
+        help="Specify the format of the returned word list.")
+    args = parser.parse_args()
+    
+    # Define special variables for use in main
+    seed = None # DEBUG
+    if seed == None:
+        # Generate seed for random number generator
+        random.seed()
+    else:
+        random.seed(a = seed)
+    
+    # Open the file for the word list and read it into a nested list
+    f = open("all_en_US.dict")
+    try:
+        dictionary = import_dictionary(f)    
+
+    finally:
+        f.close()
+ 
+    # DEBUG Currently just assume default functionality
+    print(get_random_word(dictionary), get_random_word(dictionary))
 
 if __name__ == '__main__':
 	main()
