@@ -1,14 +1,11 @@
 #! /usr/bin/python3
 # Imports
 import argparse
-import os
 import sys
 import random
 import string
 
 # Define global constants
-# Number of letters in the alphabet being used, this is redefined when the dictionary is imported
-NUM_LETTER_GROUPS = 26 
 FORMATS = ['lowercase', 'uppercase', 'capitalized', 'mixedcase', 'camelcase',
             'hyphenated-lowercase', 'hyphenated-uppercase', 'hyphenated-capitalized',
             'hyphenated-mixedcase', 'hyphenated-camelcase', 'underscored-lowercase',
@@ -123,12 +120,11 @@ def import_dictionary(opened_file):
     '''
     # Create the dictionary to hold the words
     dictionary = []
-    for index in range(NUM_LETTER_GROUPS):
-        dictionary.append([])
     
     index = -1 
     for line in opened_file:
         if line is "\n": 
+            dictionary.append([])
             index += 1
         else: 
             dictionary[index].append(line.rstrip())
@@ -181,6 +177,7 @@ def main():
     # Redefine NUM_LETTER_GROUPS based on current dictionary size
     global NUM_LETTER_GROUPS
     NUM_LETTER_GROUPS = len(dictionary)
+
     # Ensure args.count and args.initials aren't set at the same time
     if args.count != None and args.initials != None:
             print("ERROR: --count and --initials are mutually exclusive, pick one")
