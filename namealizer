@@ -93,19 +93,6 @@ def format_string(string_to_format, desired_format):
 
     else: return string_to_format
 
-def get_random_word_from_letter(dictionary, starting_letter):
-    '''
-    Takes the desired starting letter, and the dictionary to read from
-    and returns a random word beginning with that letter
-    '''
-    # Map the starting letter to the dictionary index
-    index = 0
-    for letter in string.ascii_lowercase:
-        if letter == starting_letter:
-            letter_group = index
-            break
-        else:
-            index += 1
 
     # Now get a random number that fits in this letter group
     return dictionary[letter_group][0]
