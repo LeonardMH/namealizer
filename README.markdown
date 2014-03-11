@@ -1,4 +1,4 @@
-# namealizer - A random word generator
+# namealizer - A random name generator
 
 The goal of namealizer is simple, to create a straightforward method for creating random collections of words.
 
@@ -18,6 +18,8 @@ In the simplest use case namealizer just returns two random words from the dicti
 
 	Input: namealizer
 	Output: forest kite
+
+### Long-format options
 
 Adding a little bit of complexity, the user can supply a number, this is the number of words that will be returned by namealizer. Once again, each randomly selected from the dictionary.
 
@@ -40,6 +42,21 @@ For more advanced usage the user can input initials and namealizer will return a
 
 	Input: namealizer --initials=CXM --seed=3008 --format=underscored
 	Output: crossing_xylophone_maid
+
+### Short-format options
+
+Namealizer also support the classic style unit short commandling options. For a full list of the commands just run '''namealizer --help''' or '''namealizer -h'''.
+
+In general the commands are just the first letter of the long option and do not require the equals ("=") sign. Using the same commands as above:
+
+	namealizer -c5
+	namealizer -iCXM -s3008
+	namealizer -iCXM -s3008 -fcamelcase
+	namealizer -iCXM -s3008 -fmixedcase
+	namealizer -iCXM -s3008 -fhyphenated
+	namealizer -iCXM -s3008 -funderscored
+
+The outputs are the same as shown above in [Long-format options](#Long-format-options)
 
 ## Documentation
 
