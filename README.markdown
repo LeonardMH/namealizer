@@ -56,7 +56,7 @@ In general the commands are just the first letter of the long option and do not 
 	namealizer -iCXM -s3008 -fhyphenated
 	namealizer -iCXM -s3008 -funderscored
 
-The outputs are the same as shown above in [Long-format options](#Long-format-options)
+The outputs are the same as shown above in [Long-format options](#long-format-options)
 
 ## Documentation
 
