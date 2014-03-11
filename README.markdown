@@ -74,5 +74,20 @@ A guaranteed up-to-date list of available command line options can always be det
 
 ### Formatting options
 
-Coming soon.
+The formatting options allowed by the `--format` option are listed and briefly described below.
 
++ `hyphenated` - This is actually just a compatibility wrapper which maps directly to `hyphenated-lowercase`. See `hyphenated-lowercase` for more information.
++ `underscored` - This is also a compatibility wrapper mapping directl to `underscored-lowercase`, see `underscored-lowercase` for more information.
++ `lowercase` - The lowercase option is the default format for namealizer and returns the words in lowercase format separated by spaces. E.g. `rat tree banana`
++ `uppercase` - Uppercase option returns the words in completely uppercase and separated by spaces. E.g. `RAT TREE BANANA`
++ `capitalized` - Returns each word capitalized and separated by spaces. E.g. `Rat Tree Banana`
++ `mixedcase` - This option returns the words in mixed case format with no separation by default. E.g. `ratTreeBanana`. This is a common naming convention for programmers.
++ `camelcase` - The camelcase option is very similar to mixed case except the first word is also capitalized. E.g. `RatTreeBanana`
+
+In addition to these base formats, each command listed above can be prefixed with `hyphenated-` or `underscored-` to change the word separator to a hyphen or an underscore, respectively.
+
+A few examples would be:
+	
+	namealizer --format=hyphenated-camelcase
+	namealizer --format=underscored-mixedcase
+	namealizer --format=hyphenated-uppercase
