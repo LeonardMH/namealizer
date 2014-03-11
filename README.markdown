@@ -45,7 +45,7 @@ For more advanced usage the user can input initials and namealizer will return a
 
 ### Short-format options
 
-Namealizer also support the classic style unit short commandling options. For a full list of the commands just run '''namealizer --help''' or '''namealizer -h'''.
+Namealizer also support the classic style unit short commandling options. For a full list of the commands just run `namealizer --help` or `namealizer -h`.
 
 In general the commands are just the first letter of the long option and do not require the equals ("=") sign. Using the same commands as above:
 
@@ -60,4 +60,19 @@ The outputs are the same as shown above in [Long-format options](#Long-format-op
 
 ## Documentation
 
+Full documentation coming soon.
+
+### Command line options
+
+A guaranteed up-to-date list of available command line options can always be determined by `namealizer -h`. The more useful options are described below.
+
++ `--count` - The count option allows you to specify the number of words returned by namealizer. Count can be combined with any of the other options.
++ `--seed' - The seed option give you the ability to specify the seed number used for the psuedo-random number generator. This allows you to get the same words out of namealizer between runs. Though I'm not sure if this works from one machine to another.
++ `--verbose` - The verbose option is just a command line switch (that is, it doesn't take any further options). This command causes namealizer to spit out information that the user may find valuable. Most interestingly perhaps, it prints out the seed used for generating the current word collection.
++ `--initials` - Allows the user to specify initials to use for generating the words. This just takes each letter and uses it as the starting letter for each word.
+`--format` - Lets the user control the format of the returned words. This option is documented more thoroughly below in [Formatting options](#formatting-options).
+
+### Formatting options
+
 Coming soon.
+
