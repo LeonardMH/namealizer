@@ -7,7 +7,8 @@ import random
 import string
 
 # Define global constants
-NUM_LETTER_GROUPS = 26  # Number of letters in the alphabet being used
+# Number of letters in the alphabet being used, this is redefined when the dictionary is imported
+NUM_LETTER_GROUPS = 26 
 FORMATS = ['lowercase', 'uppercase', 'capitalized', 'mixedcase', 'camelcase',
             'hyphenated-lowercase', 'hyphenated-uppercase', 'hyphenated-capitalized',
             'hyphenated-mixedcase', 'hyphenated-camelcase', 'underscored-lowercase',
@@ -115,7 +116,7 @@ def get_random_word(dictionary, starting_letter = None):
     optionally accepts a starting letter
     '''
     if starting_letter == None:
-        starting_letter = random.randint(0, NUM_LETTER_GROUPS - 1)
+        starting_letter = random.randint(0, NUM_LETTER_GROUPS)
     word_index = random.randint(0, len(dictionary[starting_letter]) - 1)
     return dictionary[starting_letter][word_index]
 
@@ -178,9 +179,13 @@ def main():
     f = open("/usr/share/namealizer/all_en_US.dict")
     try:
         dictionary = import_dictionary(f)    
-
     finally:
         f.close()
+
+    # Redefine NUM_LETTER_GROUPS based on current dictionary size
+    global NUM_LETTER_GROUPS
+    NUM_LETTER_GROUPS = len(dictionary)
+
     string_to_print = ""
     if args.count != None:
         for index in range(args.count):
@@ -190,7 +195,7 @@ def main():
 
     if args.format != None:
         string_to_print = format_string(string_to_print, args.format)
-    
+
     print(string_to_print)
 
 if __name__ == '__main__':
