@@ -2,6 +2,7 @@
 # Imports
 import argparse
 import sys
+import os
 import random
 import string
 
@@ -168,7 +169,15 @@ def main():
     if args.verbose: print("Seed used: {}".format(seed)) 
 
     # Open the file for the word list and read it into a nested list
-    f = open("/usr/share/namealizer/all_en_US.dict")
+    # Begin by checking for a dictionary location defined from command line option
+    if args.dictionary != None:
+        # First verify that the file exists
+        is_file = os.path.isfile(args.dictionary)
+        dictionary_location = args.dictionary
+    else:
+        dictionary_location = "/usr/share/namealizer/all_en_US.dict"
+
+    f = open(dictionary_location)
     try:
         dictionary = import_dictionary(f)    
     finally:
