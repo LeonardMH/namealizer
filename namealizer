@@ -14,12 +14,19 @@ FORMATS = ['lowercase', 'uppercase', 'capitalized', 'mixedcase', 'camelcase',
             'underscored-uppercase', 'underscored-capitalized', 
             'underscored-mixedcase', 'underscored-camelcase']
 
+# Adds a few compatibility formats that just expand to others
+COMPAT_FORMATS = ['hyphenated', 'underscored']
+FORMATS += COMPAT_FORMATS
+
 def format_string(string_to_format, desired_format):
     '''
     Takes an unformatted string and returns it in the desired format
     Acceptable formats are defined in the FORMATS list.
     '''
     
+    # Handle COMPAT_FORMATS
+    if desired_format in COMPAT_FORMATS: desired_format += "-lowercase"
+
     # Split the string into a list of words to make it easier to operate on
     words = string_to_format.split()
 
@@ -28,36 +35,59 @@ def format_string(string_to_format, desired_format):
     good_to_go = False
     if desired_format in FORMATS:
         good_to_go = True
-    
+   
+    # Determine and define separator
+    if "hyphenated" in desired_format: sep = "-"
+    elif "underscored" in desired_format: sep = "_"
+    else: sep = " "
+ 
     string_to_return = ""
-    if good_to_go == True and desired_format == 'lowercase':
+    if good_to_go == True and 'lowercase' in desired_format:
+        index = 0
         for word in words:
-            string_to_return += "{} ".format(word.lower())
+            index += 1
+            if index == len(words): string_to_return += "{}".format(word.lower())
+            else: string_to_return += "{}{}".format(word.lower(), sep)
         return string_to_return
 
-    if good_to_go == True and desired_format == 'uppercase':
+    elif good_to_go == True and 'uppercase' in desired_format:
+        index = 0
         for word in words:
-            string_to_return += "{} ".format(word.upper())
+            index += 1
+            if index == len(words): string_to_return += "{}".format(word.upper())
+            else: string_to_return += "{}{}".format(word.upper(), sep)
         return string_to_return
 
-    if good_to_go == True and desired_format == 'capitalized':
+    elif good_to_go == True and 'capitalized' in desired_format:
+        index = 0
         for word in words:
-            string_to_return += "{} ".format(word.capitalize())
+            index += 1
+            if index == len(words): string_to_return += "{}".format(word.capitalize())
+            else: string_to_return += "{}{}".format(word.capitalize(), sep)
         return string_to_return
 
-    if good_to_go == True and desired_format == 'mixedcase':
+    elif good_to_go == True and 'mixedcase' in desired_format:
+        index = 0
         first_word = True
+        if sep == " ": sep = ""
         for word in words:
+            index += 1
             if first_word: 
-                string_to_return += "{}".format(word.lower())
+                if index == len(words): string_to_return += "{}".format(word.lower())
+                else: string_to_return += "{}{}".format(word.lower(), sep)
                 first_word = False
             else:
-                string_to_return += "{}".format(word.capitalize())
+                if index == len(words): string_to_return += "{}".format(word.capitalize())
+                else: string_to_return += "{}{}".format(word.capitalize(), sep)
         return string_to_return
     
-    if good_to_go == True and desired_format == 'camelcase':
+    elif good_to_go == True and 'camelcase' in desired_format:
+        index = 0
+        if sep == " ": sep = ""
         for word in words:
-            string_to_return += "{}".format(word.capitalize())
+            index += 1
+            if index == len(words): string_to_return += "{}".format(word.capitalize())
+            else: string_to_return += "{}{}".format(word.capitalize(), sep)
         return string_to_return
 
     else: return string_to_format
