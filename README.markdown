@@ -12,9 +12,7 @@ It is my intent to compile a few alternate dictionaries as well. As well as crea
 
 ## Examples
 
-The concept of namealizer is a bit difficult to understand but its purpose is fairly straightforward.
-
-In the simplest use case namealizer just returns two random words from the dictionary.
+The concept of namealizer is fairly straightforward, in the simplest use case namealizer just returns two random words from the dictionary.
 
 	Input: namealizer
 	Output: forest kite
@@ -45,7 +43,7 @@ For more advanced usage the user can input initials and namealizer will return a
 
 ### Short-format options
 
-Namealizer also support the classic style unit short commandling options. For a full list of the commands just run `namealizer --help` or `namealizer -h`.
+Namealizer also support the classic-style unix short commandline options. For a full list of the commands just run `namealizer --help` or `namealizer -h`.
 
 In general the commands are just the first letter of the long option and do not require the equals ("=") sign. Using the same commands as above:
 
@@ -57,10 +55,6 @@ In general the commands are just the first letter of the long option and do not 
 	namealizer -iCXM -s3008 -funderscored
 
 The outputs are the same as shown above in [Long-format options](#long-format-options)
-
-## Documentation
-
-Full documentation coming soon.
 
 ### Command line options
 
