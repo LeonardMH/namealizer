@@ -1,9 +1,0 @@
-#! /bin/bash
-# A simple uninstall script for the namealizer utility
-# Requires super user permissions
-
-# Remove the script from /usr/bin/
-sudo rm /usr/bin/namealizer
-
-# Remove the /usr/share/namealizer directory
-sudo rm -rf /usr/share/namealizer
