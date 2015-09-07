@@ -5,8 +5,6 @@ This module is used for creating random collections of words.
 import argparse
 import sys
 import random
-import string
-import os
 
 # Define global constants
 FORMATS = ['lowercase', 'uppercase', 'capitalize', 'mixedcase', 'camelcase',
@@ -24,6 +22,13 @@ FORMATS = ['lowercase', 'uppercase', 'capitalize', 'mixedcase', 'camelcase',
 # Adds a few compatibility formats that just expand to others
 COMPATIBLE_FORMATS = ['hyphenate', 'underscore']
 FORMATS += COMPATIBLE_FORMATS
+
+
+class DictionaryNotFoundError(Exception):
+    """
+    Exception to be raising when the script fails at importing a dictionary.
+    """
+    pass
 
 
 def format_string(string_to_format, desired_format):

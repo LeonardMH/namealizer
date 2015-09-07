@@ -1,10 +1,11 @@
+import sys
+import os
 import unittest
 import glob
-import os
-import namealizer
 import random
 import string
-import sys
+import namealizer
+
 
 def write_dictionary(file_name, words_to_write):
     with open(file_name, "w") as dictionary_file:
