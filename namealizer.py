@@ -6,30 +6,34 @@ import argparse
 import sys
 import random
 import string
+import os
 
 # Define global constants
-FORMATS = ['lowercase', 'uppercase', 'capitalized', 'mixedcase', 'camelcase',
-           'hyphenated-lowercase',
-           'hyphenated-uppercase',
-           'hyphenated-capitalized',
-           'hyphenated-mixedcase',
-           'hyphenated-camelcase',
-           'underscored-lowercase',
-           'underscored-uppercase',
-           'underscored-capitalized',
-           'underscored-mixedcase',
-           'underscored-camelcase']
+FORMATS = ['lowercase', 'uppercase', 'capitalize', 'mixedcase', 'camelcase',
+           'hyphenate-lowercase',
+           'hyphenate-uppercase',
+           'hyphenate-capitalize',
+           'hyphenate-mixedcase',
+           'hyphenate-camelcase',
+           'underscore-lowercase',
+           'underscore-uppercase',
+           'underscore-capitalize',
+           'underscore-mixedcase',
+           'underscore-camelcase']
 
 # Adds a few compatibility formats that just expand to others
-COMPATIBLE_FORMATS = ['hyphenated', 'underscored']
+COMPATIBLE_FORMATS = ['hyphenate', 'underscore']
 FORMATS += COMPATIBLE_FORMATS
 
 
 def format_string(string_to_format, desired_format):
     """
-    Takes an unformatted string and returns it in the desired format
+    Takes an un-formatted string and returns it in the desired format
     Acceptable formats are defined in the FORMATS list.
     """
+    # handle the rare case where desired_format is None
+    if desired_format is None:
+        desired_format = "lowercase"
 
     # Handle COMPATIBLE_FORMATS
     if desired_format in COMPATIBLE_FORMATS:
@@ -45,9 +49,9 @@ def format_string(string_to_format, desired_format):
         good_to_go = True
 
     # Determine and define separator
-    if "hyphenated" in desired_format:
+    if "hyphenate" in desired_format:
         sep = "-"
-    elif "underscored" in desired_format:
+    elif "underscore" in desired_format:
         sep = "_"
     else:
         sep = " "
@@ -75,7 +79,7 @@ def format_string(string_to_format, desired_format):
 
         return string_to_return
 
-    elif good_to_go and 'capitalized' in desired_format:
+    elif good_to_go and 'capitalize' in desired_format:
         index = 0
 
         for word in words:
@@ -133,19 +137,9 @@ def get_random_word(dictionary, starting_letter=None):
     optionally accepts a starting letter
     """
     if starting_letter is None:
-        starting_letter = random.randint(0, NUM_LETTER_GROUPS)
-    else:
-        starting_letter = starting_letter.lower()
-        index = 0
-        for letter in string.ascii_lowercase:
-            if letter == starting_letter:
-                starting_letter = index
-                break
-            else:
-                index += 1
+        starting_letter = random.choice(dictionary.keys())
 
-    word_index = random.randint(0, len(dictionary[starting_letter]) - 1)
-    return dictionary[starting_letter][word_index]
+    return random.choice(dictionary[starting_letter])
 
 
 def import_dictionary(opened_file):
@@ -153,24 +147,67 @@ def import_dictionary(opened_file):
     Function used to import the dictionary file into memory
     opened_file should be an already opened dictionary file
     """
-    # Create the dictionary to hold the words
-    dictionary = []
-
-    index = -1
+    # create the dictionary to hold the words
+    dictionary = dict()
     for line in opened_file:
-        if line is "\n":
-            dictionary.append([])
-            index += 1
-        else:
-            dictionary[index].append(line.rstrip())
+        try:
+            dictionary[line[0].lower()].append(line.strip().lower())
+        except KeyError:
+            dictionary[line[0].lower()] = list(line.strip().lower())
 
     return dictionary
 
 
-def main():
+def main(dictionary=None, count=None, initials=None, seed=None, string_format=None, verbose=None):
+    # Seed the PRNG
+    # Generate seed for random number generator
+    if seed is None:
+        random.seed()
+        seed = random.randint(0, sys.maxsize)
+    random.seed(a=seed)
+
+    if verbose:
+        print("seed: {}".format(seed))
+
+    # open the file for the word list and read it into a nested list
+    # begin by checking for a dictionary location defined from command line option
+    if dictionary is None:
+        dictionary_location = "dictionaries/all_en_US.dict"
+    else:
+        dictionary_location = dictionary
+
+    # import the dictionary into a Python dictionary
+    with open(dictionary_location) as dictionary_file:
+        dictionary = import_dictionary(dictionary_file)
+
+    # Ensure count and initials aren't set at the same time
+    if count is not None and initials is not None:
+        print("ERROR: --count and --initials are mutually exclusive, pick one")
+        return
+
+    string_to_print = ""
+    if initials is not None:
+        for letter in initials:
+            string_to_print += "{} ".format(get_random_word(dictionary, letter.lower()))
+
+    else:
+        if count is not None:
+            if count == 0:
+                return ""
+            ranger = count
+        else:
+            ranger = 2
+        for index in range(ranger):
+            string_to_print += "{} ".format(get_random_word(dictionary))
+
+    return format_string(string_to_print.strip(), string_format)
+
+
+if __name__ == '__main__':
     # Parse the input arguments
     program_description = "Takes user inputs and returns a random collection of words."
     parser = argparse.ArgumentParser(description=program_description)
+
     parser.add_argument('-d', '--dictionary',
                         help="Specify a non-default word dictionary to use.")
     parser.add_argument('-c', '--count',
@@ -185,63 +222,11 @@ def main():
                         help="Specify the format of the returned word list.")
     parser.add_argument('-v', '--verbose',
                         help="""Make the program print extra information, can be useful
-                especially if you would like to know what seed was used
-                for the random number generator.""",
+especially if you would like to know what seed was used
+for the random number generator.""",
                         action='store_true')
+
     args = parser.parse_args()
 
-    # Define special variables for use in main
-    # Seed the PRNG
-    if args.seed is None:
-        # Generate seed for random number generator
-        random.seed()
-        seed = random.randint(0, sys.maxsize)
-        random.seed(a=seed)
-    else:
-        random.seed(a=args.seed)
-        seed = args.seed
-
-    if args.verbose:
-        print("seed: {}".format(seed))
-
-    # Open the file for the word list and read it into a nested list
-    # Begin by checking for a dictionary location defined from command line option
-    if args.dictionary is not None:
-        dictionary_location = args.dictionary
-    else:
-        dictionary_location = "/usr/share/namealizer/all_en_US.dict"
-
-    with open(dictionary_location) as dictionary_file:
-        dictionary = import_dictionary(dictionary_file)
-
-    # redefine NUM_LETTER_GROUPS based on current dictionary size
-    global NUM_LETTER_GROUPS
-    NUM_LETTER_GROUPS = len(dictionary)
-
-    # Ensure args.count and args.initials aren't set at the same time
-    if args.count is not None and args.initials is not None:
-        print("ERROR: --count and --initials are mutually exclusive, pick one")
-        return
-
-    string_to_print = ""
-    if args.count is not None:
-        for index in range(args.count):
-            string_to_print += "{} ".format(get_random_word(dictionary))
-
-    elif args.initials is not None:
-        for letter in args.initials:
-            string_to_print += "{} ".format(
-                get_random_word(dictionary, letter.lower()))
-
-    else:
-        string_to_print = "{} {}".format(get_random_word(dictionary),
-                                         get_random_word(dictionary))
-
-    if args.format is not None:
-        string_to_print = format_string(string_to_print, args.format)
-
-    print(string_to_print)
-
-
-if __name__ == '__main__':
-    main()
+    print(main(dictionary=args.dictionary, count=args.count, initials=args.initials, seed=args.seed,
+               string_format=args.format, verbose=args.verbose))
