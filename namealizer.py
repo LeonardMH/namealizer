@@ -5,6 +5,7 @@ This module is used for creating random collections of words.
 import argparse
 import sys
 import random
+import os
 
 # Define global constants
 FORMATS = ['lowercase', 'uppercase', 'capitalize', 'mixedcase', 'camelcase',
@@ -182,13 +183,16 @@ def main(dictionary=None, count=None, initials=None, seed=None, string_format=No
         dictionary_location = dictionary
 
     # import the dictionary into a Python dictionary
+    if not os.path.isfile(dictionary_location):
+        message = "Could not find the dictionary at {}".format(dictionary_location)
+        raise DictionaryNotFoundError(message)
+
     with open(dictionary_location) as dictionary_file:
         dictionary = import_dictionary(dictionary_file)
 
-    # Ensure count and initials aren't set at the same time
+    # If count and initials are set at the same time let the user know that's a no-no
     if count is not None and initials is not None:
-        print("ERROR: --count and --initials are mutually exclusive, pick one")
-        return
+        print("ERROR: --count and --initials are mutually exclusive, pick one. Using initials.")
 
     string_to_print = ""
     if initials is not None:
