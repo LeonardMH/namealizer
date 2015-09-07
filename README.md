@@ -6,7 +6,7 @@ The apparent usefulness of such a tool isn't immediately obvious but there are s
 
 **If you are using namealizer feel free to let me know what for!**
 
-The dictionary included with namealizer was compiled from various sources with the main dictionary being the en\_US dictionary used in Hunspell. The dictionary was mirrored on sourceforge at [Kevin's Word List Page](http://wordlist.sourceforge.net").
+The dictionary included with namealizer was compiled from various sources with the main dictionary being the en\_US dictionary used in Hunspell. The dictionary was mirrored on sourceforge at [Kevin's Word List Page](http://wordlist.sourceforge.net).
 
 It is my intent to compile a few alternate dictionaries as well. As well as creating a parser tool to easily reformat arbitrary word lists.
 
