@@ -214,12 +214,12 @@ class TestActualUsage(unittest.TestCase):
         # test for 0 seed
         self.assertTrue(are_two_seed_runs_equal(0))
 
-        # test for sys.maxint seed
-        self.assertTrue(are_two_seed_runs_equal(sys.maxint))
+        # test for sys.maxsize seed
+        self.assertTrue(are_two_seed_runs_equal(sys.maxsize))
 
         # test for 10 random seeds
         for _ in range(10):
-            self.assertTrue(are_two_seed_runs_equal(random.randint(1, sys.maxint)))
+            self.assertTrue(are_two_seed_runs_equal(random.randint(1, sys.maxsize)))
 
 if __name__ == '__main__':
     random.seed()

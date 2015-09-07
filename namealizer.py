@@ -142,7 +142,7 @@ def get_random_word(dictionary, starting_letter=None):
     optionally accepts a starting letter
     """
     if starting_letter is None:
-        starting_letter = random.choice(dictionary.keys())
+        starting_letter = random.choice(list(dictionary.keys()))
 
     return random.choice(dictionary[starting_letter])
 
