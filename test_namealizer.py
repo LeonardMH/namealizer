@@ -83,81 +83,51 @@ class TestStringFormatter(unittest.TestCase):
     This function is the final thing that processes strings before they are printed so it takes
     strings of the format "hello this is a string" and turns them into things like
     "HelloThisIsAString"
-
-    Supported formats:
-        - lowercase - The default format, "the test string"
-        - uppercase - "THE TEST STRING"
-        - capitalize - "The Test String"
-        - mixedcase - "theTestString"
-        - camelcase - "TheTestString"
-        - hyphenate-lowercase - "the-test-string"
-        - hyphenate-uppercase - "THE-TEST-STRING"
-        - hyphenate-capitalize - "The-Test-String"
-        - hyphenate-mixedcase - "the-Test-String"
-        - hyphenate-camelcase - "The-Test-String"
-        - hyphenate - Same as `hyphenated-lowercase`
-        - underscore-lowercase - "the_test_string"
-        - underscore-uppercase - "THE_TEST_STRING"
-        - underscore-capitalize - "The_Test_String"
-        - underscore-mixedcase - "the_Test_String"
-        - underscore-camelcase - "The_Test_String"
-        - underscore - Same as `underscore-lowercase`
     """
-    test_string = "super testable strings"
+    # test all the base wordstyles
+    test_string = "all the world"
+    separators = ["", "_", "-", "*", "$", "@#$", "monkey"]
+    expected_lowercase = ["alltheworld", "all_the_world", "all-the-world", "all*the*world", "all$the$world",
+                          "all@#$the@#$world", "allmonkeythemonkeyworld"]
+    expected_uppercase = ["ALLTHEWORLD", "ALL_THE_WORLD", "ALL-THE-WORLD", "ALL*THE*WORLD", "ALL$THE$WORLD",
+                          "ALL@#$THE@#$WORLD", "ALLmonkeyTHEmonkeyWORLD"]
+    expected_capitalize = ["AllTheWorld", "All_The_World", "All-The-World", "All*The*World", "All$The$World",
+                           "All@#$The@#$World", "AllmonkeyThemonkeyWorld"]
+    expected_mixedcase = ["allTheWorld", "all_The_World", "all-The-World", "all*The*World", "all$The$World",
+                          "all@#$The@#$World", "allmonkeyThemonkeyWorld"]
 
-    # test all the base format cases
     def test_lowercase(self):
-        self.assertEqual(self.test_string, namealizer.format_string(self.test_string, "lowercase"))
+        self.assertEqual(self.test_string.lower(), namealizer.format_string(self.test_string, "lowercase"))
 
     def test_uppercase(self):
         self.assertEqual(self.test_string.upper(), namealizer.format_string(self.test_string, "uppercase"))
 
-    def test_capitalized(self):
-        self.assertEqual("Super Testable Strings", namealizer.format_string(self.test_string, "capitalize"))
+    def test_capitalize(self):
+        self.assertEqual("All The World", namealizer.format_string(self.test_string, "capitalize"))
 
     def test_mixedcase(self):
-        self.assertEqual("superTestableStrings", namealizer.format_string(self.test_string, "mixedcase"))
+        self.assertEqual("all The World", namealizer.format_string(self.test_string, "mixedcase"))
 
-    def test_camelcase(self):
-        self.assertEqual("SuperTestableStrings", namealizer.format_string(self.test_string, "camelcase"))
+    # test some separators
+    def test_separators_lowercase(self):
+        for index, separator in enumerate(self.separators):
+            self.assertEqual(self.expected_lowercase[index],
+                             namealizer.format_string(self.test_string, "lowercase", separator))
 
-    # test the hyphenate format cases
-    def test_hyphenate_lowercase(self):
-        self.assertEqual("super-testable-strings", namealizer.format_string(self.test_string, "hyphenate-lowercase"))
+    def test_separators_uppercase(self):
+        for index, separator in enumerate(self.separators):
+            self.assertEqual(self.expected_uppercase[index],
+                             namealizer.format_string(self.test_string, "uppercase", separator))
 
-    def test_hyphenate_uppercase(self):
-        self.assertEqual("SUPER-TESTABLE-STRINGS", namealizer.format_string(self.test_string, "hyphenate-uppercase"))
+    def test_separators_capitalize(self):
+        for index, separator in enumerate(self.separators):
+            self.assertEqual(self.expected_capitalize[index],
+                             namealizer.format_string(self.test_string, "capitalize", separator))
 
-    def test_hyphenate_capitalized(self):
-        self.assertEqual("Super-Testable-Strings", namealizer.format_string(self.test_string, "hyphenate-capitalize"))
-
-    def test_hyphenate_mixedcase(self):
-        self.assertEqual("super-Testable-Strings", namealizer.format_string(self.test_string, "hyphenate-mixedcase"))
-
-    def test_hyphenate_camelcase(self):
-        self.assertEqual("Super-Testable-Strings", namealizer.format_string(self.test_string, "hyphenate-camelcase"))
-
-    def test_hyphenate(self):
-        self.assertEqual("super-testable-strings", namealizer.format_string(self.test_string, "hyphenate"))
-
-    # test the underscore format cases
-    def test_underscore_lowercase(self):
-        self.assertEqual("super_testable_strings", namealizer.format_string(self.test_string, "underscore-lowercase"))
-
-    def test_underscore_uppercase(self):
-        self.assertEqual("SUPER_TESTABLE_STRINGS", namealizer.format_string(self.test_string, "underscore-uppercase"))
-
-    def test_underscore_capitalized(self):
-        self.assertEqual("Super_Testable_Strings", namealizer.format_string(self.test_string, "underscore-capitalize"))
-
-    def test_underscore_mixedcase(self):
-        self.assertEqual("super_Testable_Strings", namealizer.format_string(self.test_string, "underscore-mixedcase"))
-
-    def test_underscore_camelcase(self):
-        self.assertEqual("Super_Testable_Strings", namealizer.format_string(self.test_string, "underscore-camelcase"))
-
-    def test_underscore(self):
-        self.assertEqual("super_testable_strings", namealizer.format_string(self.test_string, "underscore"))
+    def test_separators_mixedcase(self):
+        for index, separator in enumerate(self.separators):
+            self.assertEqual(self.expected_mixedcase[index],
+                             namealizer.format_string(self.test_string, "mixedcase", separator))
 
 
 class TestRandomWordGrabber(unittest.TestCase):
@@ -180,7 +150,7 @@ class TestActualUsage(unittest.TestCase):
     """
 
     def test_no_arguments(self):
-        # this test should return a two litter lowercase set
+        # this test should return a two letter lowercase set
         self.assertEqual(2, len(namealizer.main().split(" ")))
 
     def test_with_various_count_arguments(self):

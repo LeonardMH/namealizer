@@ -1,140 +1,100 @@
 """
 This module is used for creating random collections of words.
 """
-
 import argparse
 import sys
 import random
 import os
 
-# Define global constants
-FORMATS = ['lowercase', 'uppercase', 'capitalize', 'mixedcase', 'camelcase',
-           'hyphenate-lowercase',
-           'hyphenate-uppercase',
-           'hyphenate-capitalize',
-           'hyphenate-mixedcase',
-           'hyphenate-camelcase',
-           'underscore-lowercase',
-           'underscore-uppercase',
-           'underscore-capitalize',
-           'underscore-mixedcase',
-           'underscore-camelcase']
-
-# Adds a few compatibility formats that just expand to others
-COMPATIBLE_FORMATS = ['hyphenate', 'underscore']
-FORMATS += COMPATIBLE_FORMATS
-
 
 class DictionaryNotFoundError(Exception):
     """
-    Exception to be raising when the script fails at importing a dictionary.
+    Exception to be raised when the script fails at importing a dictionary.
     """
     pass
 
 
-def format_string(string_to_format, desired_format):
+class InvalidWordStyleError(Exception):
+    """
+    Exception to raise when the user passes in an invalid wordstyle
+    """
+    pass
+
+
+def format_word_list_lowercase(word_list):
+    """
+    Given a list of words, this function returns a new list where all of the words are lowercase
+    :param word_list: list, a list of words
+    :return: list, a list of words formatted in lowercase
+    """
+    return [word.lower() for word in word_list]
+
+
+def format_word_list_uppercase(word_list):
+    """
+    Given a list of words, this function returns a new list where all of the words are uppercase
+    :param word_list: list, a list of words
+    :return: list, a list of words formatted in uppercase
+    """
+    return [word.upper() for word in word_list]
+
+
+def format_word_list_capitalize(word_list):
+    """
+    Given a list of words, this function returns a new list where all of the words are capitalized
+    :param word_list: list, a list of words
+    :return: list, a list of words where each word is capitalized
+    """
+    return [word.capitalize() for word in word_list]
+
+
+def format_word_list_mixedcase(word_list):
+    """
+    Given a list of words, this function returns a new list where the words follow mixed case convention.
+    As a reminder this is mixedCase.
+    :param word_list: list, a list of words
+    :return: list, a list of words where the words are mixed case
+    """
+    to_return, first_word = list(), True
+    for word in word_list:
+        if first_word:
+            to_return.append(word.lower())
+            first_word = False
+        else:
+            to_return.append(word.capitalize())
+    return to_return
+
+
+def format_string(string_to_format, wordstyle=None, separator=None):
     """
     Takes an un-formatted string and returns it in the desired format
-    Acceptable formats are defined in the FORMATS list.
+    Acceptable formats are defined in the function_map dictionary.
     """
-    # handle the rare case where desired_format is None
-    if desired_format is None:
-        desired_format = "lowercase"
+    # first split the string up into its constituent words
+    words = string_to_format.split(" ")
 
-    # Handle COMPATIBLE_FORMATS
-    if desired_format in COMPATIBLE_FORMATS:
-        desired_format += "-lowercase"
+    # then set the defaults for any arguments that are None
+    if wordstyle is None:
+        wordstyle = "lowercase"
 
-    # Split the string into a list of words to make it easier to operate on
-    words = string_to_format.split()
+    if separator is None:
+        separator = " "
 
-    # Do some error checking on desired_format
-    desired_format = desired_format.lower()
-    good_to_go = False
-    if desired_format in FORMATS:
-        good_to_go = True
+    # format the individual words
+    function_map = {
+        "lowercase": format_word_list_lowercase,
+        "uppercase": format_word_list_uppercase,
+        "capitalize": format_word_list_capitalize,
+        "mixedcase": format_word_list_mixedcase
+    }
 
-    # Determine and define separator
-    if "hyphenate" in desired_format:
-        sep = "-"
-    elif "underscore" in desired_format:
-        sep = "_"
-    else:
-        sep = " "
+    try:
+        words = function_map[wordstyle](words)
+    except KeyError:
+        InvalidWordStyleError("Passed in an invalid wordstyle, allowed styles are {}".format(function_map.keys()))
 
-    string_to_return = ""
-    if good_to_go and 'lowercase' in desired_format:
-        index = 0
-        for word in words:
-            index += 1
-            if index == len(words):
-                string_to_return += "{}".format(word.lower())
-            else:
-                string_to_return += "{}{}".format(word.lower(), sep)
-        return string_to_return
-
-    elif good_to_go and 'uppercase' in desired_format:
-        index = 0
-
-        for word in words:
-            index += 1
-            if index == len(words):
-                string_to_return += "{}".format(word.upper())
-            else:
-                string_to_return += "{}{}".format(word.upper(), sep)
-
-        return string_to_return
-
-    elif good_to_go and 'capitalize' in desired_format:
-        index = 0
-
-        for word in words:
-            index += 1
-            if index == len(words):
-                string_to_return += "{}".format(word.capitalize())
-            else:
-                string_to_return += "{}{}".format(word.capitalize(), sep)
-
-        return string_to_return
-
-    elif good_to_go and 'mixedcase' in desired_format:
-        index = 0
-        first_word = True
-        if sep == " ":
-            sep = ""
-
-        for word in words:
-            index += 1
-            if first_word:
-                if index == len(words):
-                    string_to_return += "{}".format(word.lower())
-                else:
-                    string_to_return += "{}{}".format(word.lower(), sep)
-                first_word = False
-            else:
-                if index == len(words):
-                    string_to_return += "{}".format(word.capitalize())
-                else:
-                    string_to_return += "{}{}".format(word.capitalize(), sep)
-
-        return string_to_return
-
-    elif good_to_go and 'camelcase' in desired_format:
-        index = 0
-        if sep == " ":
-            sep = ""
-
-        for word in words:
-            index += 1
-            if index == len(words):
-                string_to_return += "{}".format(word.capitalize())
-            else:
-                string_to_return += "{}{}".format(word.capitalize(), sep)
-
-        return string_to_return
-
-    else:
-        return string_to_format
+    # now add in the separator and return
+    return str(separator).join(words)
 
 
 def get_random_word(dictionary, starting_letter=None):
@@ -164,7 +124,7 @@ def import_dictionary(opened_file):
     return dictionary
 
 
-def main(dictionary=None, count=None, initials=None, seed=None, string_format=None, verbose=None):
+def main(dictionary=None, count=None, initials=None, seed=None, wordstyle=None, separator=None, verbose=None):
     # Seed the PRNG
     # Generate seed for random number generator
     if seed is None:
@@ -209,7 +169,7 @@ def main(dictionary=None, count=None, initials=None, seed=None, string_format=No
         for index in range(ranger):
             string_to_print += "{} ".format(get_random_word(dictionary))
 
-    return format_string(string_to_print.strip(), string_format)
+    return format_string(string_to_print.strip(), wordstyle, separator)
 
 
 if __name__ == '__main__':
@@ -225,17 +185,18 @@ if __name__ == '__main__':
     parser.add_argument('-i', '--initials',
                         help="Give a string of letters to form the word list from")
     parser.add_argument('-s', '--seed',
-                        help="Specify the seed to use for the random number generator.",
+                        help="Specify the seed to use for the random number generator. Using the same seed without "
+                             "changing other settings will give repeatable results.",
                         type=int)
-    parser.add_argument('-f', '--format',
-                        help="Specify the format of the returned word list.")
+    parser.add_argument('-ws', '--wordstyle',
+                        help="Specify how to style the individual words. Default is lowercase.")
+    parser.add_argument('-sep', '--separator', help="What to use to separate words. Default is space.")
     parser.add_argument('-v', '--verbose',
-                        help="""Make the program print extra information, can be useful
-especially if you would like to know what seed was used
-for the random number generator.""",
+                        help="""Make the program print extra information, can be useful especially if you would like
+                                to know what seed was used for the random number generator.""",
                         action='store_true')
 
     args = parser.parse_args()
 
     print(main(dictionary=args.dictionary, count=args.count, initials=args.initials, seed=args.seed,
-               string_format=args.format, verbose=args.verbose))
+               wordstyle=args.wordstyle, separator=args.separator, verbose=args.verbose))
