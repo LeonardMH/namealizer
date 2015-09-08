@@ -65,3 +65,11 @@ A guaranteed up-to-date list of available command line options can always be det
 ### Formatting options
 
 The formatting options allowed by the `--wordstyle` and `--separator` are essentially endless. You can do `CamelCase` with: `python namealizer --wordstyle=capitalize --separator=""` or perform the classic [Lil' John Transform](https://www.youtube.com/watch?v=GxBSyx85Kp8) with `python namealizer --wordstyle=uppercase --separator=" YEAH! "`
+
+The full list of options allowed as wordstyles are:
+- lowercase - "every word is lowercase"
+- uppercase - "EVERY WORD IS UPPERCASE"
+- capitalize - Each Word Is Capitalized"
+- mixedcase - "all But The First Word Are Capitalized"
+ 
+If you would like to see other wordstyles added [just file a request as an issue](https://github.com/LeonardMH/namealizer/issues/new) or implement it yourself and [create a pull request](https://github.com/LeonardMH/namealizer/compare)!
