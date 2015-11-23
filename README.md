@@ -82,10 +82,6 @@ number used for the psuedo-random number generator. This allows you to
 get the same words out of namealizer between runs. I'm not sure if this
 ports between machines, i.e. if I use seed 300 it may not be the same
 thing as your seed 300 (I doubt they are the same).
-+ `--verbose` - The verbose option is just a command line switch (that
-is, it doesn't take any further options). This command causes namealizer
-to spit out information that the user may find valuable. Most usefully,
-it prints out the seed used for generating the current word collection.
 + `--initials` - Allows the user to specify initials to use for
 generating the words. This just takes each letter and uses it as the
 starting letter for each word.
