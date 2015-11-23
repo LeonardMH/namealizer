@@ -65,20 +65,13 @@ def format_word_list_mixedcase(word_list):
     return to_return
 
 
-def format_string(string_to_format, wordstyle=None, separator=None):
+def format_string(string_to_format, wordstyle="lowercase", separator=" "):
     """
     Takes an un-formatted string and returns it in the desired format
     Acceptable formats are defined in the function_map dictionary.
     """
     # first split the string up into its constituent words
     words = string_to_format.split(" ")
-
-    # then set the defaults for any arguments that are None
-    if wordstyle is None:
-        wordstyle = "lowercase"
-
-    if separator is None:
-        separator = " "
 
     # format the individual words
     function_map = {
@@ -124,35 +117,26 @@ def import_dictionary(opened_file):
     return dictionary
 
 
-def main(dictionary=None, count=None, initials=None, seed=None, wordstyle=None, separator=None, verbose=None):
-    # Seed the PRNG
+def main(dictionary="dictionaries/all_en_US.dict", count=None, initials=None,
+         seed=None, wordstyle=None, separator=None):
     # Generate seed for random number generator
     if seed is None:
         random.seed()
         seed = random.randint(0, sys.maxsize)
     random.seed(a=seed)
 
-    if verbose:
-        print("seed: {}".format(seed))
-
-    # open the file for the word list and read it into a nested list
-    # begin by checking for a dictionary location defined from command line option
-    if dictionary is None:
-        dictionary_location = "dictionaries/all_en_US.dict"
-    else:
-        dictionary_location = dictionary
-
-    # import the dictionary into a Python dictionary
-    if not os.path.isfile(dictionary_location):
-        message = "Could not find the dictionary at {}".format(dictionary_location)
+    # attempt to read in the given dictionary
+    try:
+        with open(dictionary) as dictionary_file:
+            dictionary = import_dictionary(dictionary_file)
+    except IOError:
+        message = "Could not find the dictionary at {}".format(dictionary)
         raise DictionaryNotFoundError(message)
-
-    with open(dictionary_location) as dictionary_file:
-        dictionary = import_dictionary(dictionary_file)
 
     # If count and initials are set at the same time let the user know that's a no-no
     if count is not None and initials is not None:
-        print("ERROR: --count and --initials are mutually exclusive, pick one. Using initials.")
+        print("ERROR: --count and --initials are mutually exclusive")
+        print("Using initials.")
 
     string_to_print = ""
     if initials is not None:
@@ -168,6 +152,14 @@ def main(dictionary=None, count=None, initials=None, seed=None, wordstyle=None, 
             ranger = 2
         for index in range(ranger):
             string_to_print += "{} ".format(get_random_word(dictionary))
+
+    # if the user didn't provide a wordstyle use the default
+    if wordstyle == None:
+        wordstyle = "lowercase"
+
+    # if the user didn't provide a separator then use the default
+    if separator == None:
+        separator = " "
 
     return format_string(string_to_print.strip(), wordstyle, separator)
 
@@ -191,12 +183,8 @@ if __name__ == '__main__':
     parser.add_argument('-ws', '--wordstyle',
                         help="Specify how to style the individual words. Default is lowercase.")
     parser.add_argument('-sep', '--separator', help="What to use to separate words. Default is space.")
-    parser.add_argument('-v', '--verbose',
-                        help="""Make the program print extra information, can be useful especially if you would like
-                                to know what seed was used for the random number generator.""",
-                        action='store_true')
 
     args = parser.parse_args()
 
     print(main(dictionary=args.dictionary, count=args.count, initials=args.initials, seed=args.seed,
-               wordstyle=args.wordstyle, separator=args.separator, verbose=args.verbose))
+               wordstyle=args.wordstyle, separator=args.separator))
