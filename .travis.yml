@@ -6,7 +6,7 @@ python:
     - "3.4"
     - "3.5"
     - "nightly"
-before_install:
+install:
     - pip install coveralls
 script:
     python test_namealizer.py
