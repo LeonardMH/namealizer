@@ -9,7 +9,6 @@ python:
 install:
     - pip install coveralls
 script:
-    python test_namealizer.py
     coverage run --source=namealizer test_namealizer.py
 after_success:
     - coveralls
