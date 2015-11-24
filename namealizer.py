@@ -156,9 +156,8 @@ def main(dictionary='dictionaries/all_en_US.dict', count=None, initials=None,
 
     return format_string(string_to_print.strip(), wordstyle, separator)
 
-
-if __name__ == '__main__':
-    # Parse the input arguments
+def create_parser():
+    """Creates the Namespace object to be used by the rest of the tool"""
     program_description = 'Takes user inputs and returns a random collection of words.'
     parser = argparse.ArgumentParser(description=program_description)
 
@@ -188,8 +187,11 @@ if __name__ == '__main__':
                         type=str,
                         help='What to use to separate words. Default is space.')
 
-    args = parser.parse_args()
+    return parser.parse_args()
 
+if __name__ == '__main__':
+    # Parse the input arguments
+    args = create_parser()
     print(main(dictionary=args.dictionary,
                count=args.count,
                initials=args.initials,

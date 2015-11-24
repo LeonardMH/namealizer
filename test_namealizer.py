@@ -176,7 +176,13 @@ class TestRandomWordGrabber(unittest.TestCase):
 class TestCommandLineParameters(unittest.TestCase):
     """Verifies command line parameters are handled correctly
     """
-    pass
+
+    def test_create_parser(self):
+        import argparse
+        return_value = namealizer.create_parser()
+        self.assertIsInstance(return_value, argparse.Namespace)
+        num_args = 6
+        self.assertEqual(len(return_value.__dict__), num_args)
 
 
 class TestActualUsage(unittest.TestCase):
