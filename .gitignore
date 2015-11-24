@@ -2,3 +2,5 @@
 .pydevproject
 .idea/*
 *.pyc
+.coverage
+*,cover
