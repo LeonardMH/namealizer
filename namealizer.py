@@ -118,8 +118,8 @@ def import_dictionary(opened_file):
     return dictionary
 
 
-def main(dictionary="dictionaries/all_en_US.dict", count=None, initials=None,
-         seed=None, wordstyle=None, separator=None):
+def main(dictionary='dictionaries/all_en_US.dict', count=None, initials=None,
+         seed=None, wordstyle='lowercase', separator=' '):
     # Generate seed for random number generator
     if seed is None:
         random.seed()
@@ -154,38 +154,45 @@ def main(dictionary="dictionaries/all_en_US.dict", count=None, initials=None,
         for index in range(ranger):
             string_to_print += "{} ".format(get_random_word(dictionary))
 
-    # if the user didn't provide a wordstyle use the default
-    if wordstyle == None:
-        wordstyle = "lowercase"
-
-    # if the user didn't provide a separator then use the default
-    if separator == None:
-        separator = " "
-
     return format_string(string_to_print.strip(), wordstyle, separator)
 
 
 if __name__ == '__main__':
     # Parse the input arguments
-    program_description = "Takes user inputs and returns a random collection of words."
+    program_description = 'Takes user inputs and returns a random collection of words.'
     parser = argparse.ArgumentParser(description=program_description)
 
     parser.add_argument('-d', '--dictionary',
-                        help="Specify a non-default word dictionary to use.")
+                        nargs='?',
+                        default='dictionaries/all_en_US.dict',
+                        help='Specify a non-default word dictionary to use.')
     parser.add_argument('-c', '--count',
-                        help="Specify the number of words to return.",
+                        help='Specify the number of words to return.',
                         type=int)
     parser.add_argument('-i', '--initials',
-                        help="Give a string of letters to form the word list from")
+                        type=str,
+                        help='Give a string of letters to form the word list from')
     parser.add_argument('-s', '--seed',
-                        help="Specify the seed to use for the random number generator. Using the same seed without "
-                             "changing other settings will give repeatable results.",
+                        help='Specify the seed to use for the random number generator. '
+                        'Using the same seed without changing other settings will give '
+                        'repeatable results.',
                         type=int)
     parser.add_argument('-ws', '--wordstyle',
-                        help="Specify how to style the individual words. Default is lowercase.")
-    parser.add_argument('-sep', '--separator', help="What to use to separate words. Default is space.")
+                        nargs='?',
+                        default='lowercase',
+                        type=str,
+                        help='Specify how to style the individual words. Default is lowercase.')
+    parser.add_argument('-sep', '--separator',
+                        nargs='?',
+                        default=' ',
+                        type=str,
+                        help='What to use to separate words. Default is space.')
 
     args = parser.parse_args()
 
-    print(main(dictionary=args.dictionary, count=args.count, initials=args.initials, seed=args.seed,
-               wordstyle=args.wordstyle, separator=args.separator))
+    print(main(dictionary=args.dictionary,
+               count=args.count,
+               initials=args.initials,
+               seed=args.seed,
+               wordstyle=args.wordstyle,
+               separator=args.separator))
