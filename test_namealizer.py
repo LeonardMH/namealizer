@@ -226,6 +226,13 @@ class TestActualUsage(unittest.TestCase):
         for _ in range(10):
             self.assertTrue(are_two_seed_runs_equal(random.randint(1, sys.maxsize)))
 
+    def test_count_and_initials_both_defined(self):
+        """If count and initials are passed to main, initials are used"""
+        initials_to_use = "MHL"
+        count_to_use = 4
+        result = namealizer.main(count=count_to_use, initials=initials_to_use)
+        self.assertTrue(len(result), len(initials_to_use))
+
     def test_dictionary_not_found(self):
         with self.assertRaises(namealizer.DictionaryNotFoundError):
             namealizer.main(dictionary="your_mom.dict")
