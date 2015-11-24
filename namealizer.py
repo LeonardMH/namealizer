@@ -84,7 +84,8 @@ def format_string(string_to_format, wordstyle="lowercase", separator=" "):
     try:
         words = function_map[wordstyle](words)
     except KeyError:
-        InvalidWordStyleError("Passed in an invalid wordstyle, allowed styles are {}".format(function_map.keys()))
+        msg = "Passed in an invalid wordstyle, allowed styles are {}"
+        raise InvalidWordStyleError(msg.format(function_map.keys()))
 
     # now add in the separator and return
     return str(separator).join(words)

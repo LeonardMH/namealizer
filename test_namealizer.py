@@ -163,6 +163,9 @@ class TestStringFormatter(unittest.TestCase):
                                             separator)
             self.assertEqual(standard, test)
 
+    def test_invalid_word_style(self):
+        with self.assertRaises(namealizer.InvalidWordStyleError):
+            namealizer.format_string("My big pizza", "copy")
 
 class TestRandomWordGrabber(unittest.TestCase):
     """Verify the function that grabs words from the dictionary
@@ -182,7 +185,6 @@ class TestActualUsage(unittest.TestCase):
 
     def test_no_arguments(self):
         # this test should return a two letter lowercase set
-        print(namealizer.main().split(" "))
         self.assertEqual(2, len(namealizer.main().split(" ")))
 
     def test_with_various_count_arguments(self):
