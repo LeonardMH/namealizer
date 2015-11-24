@@ -5,6 +5,7 @@ import argparse
 import sys
 import random
 import os
+import logging
 
 
 class DictionaryNotFoundError(Exception):
@@ -136,8 +137,8 @@ def main(dictionary='dictionaries/all_en_US.dict', count=None, initials=None,
 
     # If count and initials are set at the same time let the user know that's a no-no
     if count is not None and initials is not None:
-        print("ERROR: --count and --initials are mutually exclusive")
-        print("Using initials.")
+        msg = "--count and --initials are mutually exclusive, using initials"
+        logging.info(msg)
 
     string_to_print = ""
     if initials is not None:
