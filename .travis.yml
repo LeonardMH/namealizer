@@ -6,7 +6,7 @@ python:
     - "3.5"
     - "nightly"
 install:
-    - pip install --user coverage==4.0.2
+    - pip install coverage==4.0.2
 script:
     coverage run --source=namealizer test_namealizer.py
 after_success:
