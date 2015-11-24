@@ -226,6 +226,10 @@ class TestActualUsage(unittest.TestCase):
         for _ in range(10):
             self.assertTrue(are_two_seed_runs_equal(random.randint(1, sys.maxsize)))
 
+    def test_dictionary_not_found(self):
+        with self.assertRaises(namealizer.DictionaryNotFoundError):
+            namealizer.main(dictionary="your_mom.dict")
+
 if __name__ == '__main__':
     random.seed()
     unittest.main()
