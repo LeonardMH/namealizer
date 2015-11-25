@@ -80,6 +80,13 @@ class TestDictionaryImport(unittest.TestCase):
         # verify that this dictionary has all the letters specified
         self.assertEqual(len(self.words_sparse), len(self.well_formatted_sparse))
 
+    def test_sparse_dict_access_unavailable_letter(self):
+        """Tests condition of dict not containing the desired letter"""
+        with self.assertRaises(namealizer.NoWordForLetter):
+            func = namealizer.get_random_word
+            dictionary = self.well_formatted_sparse
+            func(dictionary, starting_letter='c')
+
     def tearDown(self):
         # remove the dictionaries
         for dict_file in glob.glob("*.dict"):
@@ -167,11 +174,6 @@ class TestStringFormatter(unittest.TestCase):
         with self.assertRaises(namealizer.InvalidWordStyleError):
             namealizer.format_string("My big pizza", "copy")
 
-class TestRandomWordGrabber(unittest.TestCase):
-    """Verify the function that grabs words from the dictionary
-    """
-    pass
-
 
 class TestCommandLineParameters(unittest.TestCase):
     """Verifies command line parameters are handled correctly
@@ -195,7 +197,7 @@ class TestActualUsage(unittest.TestCase):
 
     def test_with_various_count_arguments(self):
         # verify that we can return up to a certain number of words
-        for test in range(40):
+        for test in range(6):
             if test == 0:
                 # this test has to be special cased because splitting on spaces means that even an empty string
                 # will have a length of 1.
@@ -207,8 +209,8 @@ class TestActualUsage(unittest.TestCase):
         # check the case where initials is passed in as an empty string
         self.assertEqual("", namealizer.main(initials=""))
 
-        max_number_of_initials = 50
-        for test in range(40):
+        max_number_of_initials = 24
+        for test in range(6):
             num_initials = random.randint(1, max_number_of_initials)
             initials = ""
             # pull this many random letters from the alphabet

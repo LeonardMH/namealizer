@@ -1,5 +1,4 @@
-"""
-This module is used for creating random collections of words.
+"""Create and format random collections of words
 """
 import argparse
 import sys
@@ -10,7 +9,7 @@ import logging
 
 class DictionaryNotFoundError(Exception):
     """
-    Exception to be raised when the script fails at importing a dictionary.
+    Exception to be raised when the script fails at importing a dictionary
     """
     pass
 
@@ -21,10 +20,17 @@ class InvalidWordStyleError(Exception):
     """
     pass
 
+class NoWordForLetter(Exception):
+    """
+    Raised when dictionary has no word beginning with requested letter
+    """
+    pass
 
 def format_word_list_lowercase(word_list):
     """
-    Given a list of words, this function returns a new list where all of the words are lowercase
+    Given a list of words, this function returns a new list where all of
+    the words are lowercase
+
     :param word_list: list, a list of words
     :return: list, a list of words formatted in lowercase
     """
@@ -33,7 +39,9 @@ def format_word_list_lowercase(word_list):
 
 def format_word_list_uppercase(word_list):
     """
-    Given a list of words, this function returns a new list where all of the words are uppercase
+    Given a list of words, this function returns a new list where all of
+    the words are uppercase
+
     :param word_list: list, a list of words
     :return: list, a list of words formatted in uppercase
     """
@@ -42,7 +50,9 @@ def format_word_list_uppercase(word_list):
 
 def format_word_list_capitalize(word_list):
     """
-    Given a list of words, this function returns a new list where all of the words are capitalized
+    Given a list of words, this function returns a new list where all of
+    the words are capitalized
+
     :param word_list: list, a list of words
     :return: list, a list of words where each word is capitalized
     """
@@ -51,8 +61,11 @@ def format_word_list_capitalize(word_list):
 
 def format_word_list_mixedcase(word_list):
     """
-    Given a list of words, this function returns a new list where the words follow mixed case convention.
+    Given a list of words, this function returns a new list where the
+    words follow mixed case convention.
+
     As a reminder this is mixedCase.
+
     :param word_list: list, a list of words
     :return: list, a list of words where the words are mixed case
     """
@@ -100,7 +113,13 @@ def get_random_word(dictionary, starting_letter=None):
     if starting_letter is None:
         starting_letter = random.choice(list(dictionary.keys()))
 
-    return random.choice(dictionary[starting_letter])
+    try:
+        to_return = random.choice(dictionary[starting_letter])
+    except KeyError:
+        msg = "Dictionary does not contain a word starting with '{}'"
+        raise NoWordForLetter(msg.format(starting_letter))
+
+    return to_return
 
 
 def import_dictionary(opened_file):
@@ -159,8 +178,7 @@ def main(dictionary='dictionaries/all_en_US.dict', count=None, initials=None,
 
 def create_parser():
     """Creates the Namespace object to be used by the rest of the tool"""
-    program_description = 'Takes user inputs and returns a random collection of words.'
-    parser = argparse.ArgumentParser(description=program_description)
+    parser = argparse.ArgumentParser(description=__doc__)
 
     parser.add_argument('-d', '--dictionary',
                         nargs='?',
@@ -181,7 +199,8 @@ def create_parser():
                         nargs='?',
                         default='lowercase',
                         type=str,
-                        help='Specify how to style the individual words. Default is lowercase.')
+                        help='Specify how to style the individual words. '
+                        'Default is lowercase.')
     parser.add_argument('-sep', '--separator',
                         nargs='?',
                         default=' ',
