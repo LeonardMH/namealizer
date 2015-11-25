@@ -202,7 +202,7 @@ class TestActualUsage(unittest.TestCase):
 
     def test_with_various_count_arguments(self):
         # verify that we can return up to a certain number of words
-        for test in range(40):
+        for test in range(6):
             if test == 0:
                 # this test has to be special cased because splitting on spaces means that even an empty string
                 # will have a length of 1.
@@ -214,8 +214,8 @@ class TestActualUsage(unittest.TestCase):
         # check the case where initials is passed in as an empty string
         self.assertEqual("", namealizer.main(initials=""))
 
-        max_number_of_initials = 50
-        for test in range(40):
+        max_number_of_initials = 24
+        for test in range(6):
             num_initials = random.randint(1, max_number_of_initials)
             initials = ""
             # pull this many random letters from the alphabet
