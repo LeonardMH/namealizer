@@ -174,11 +174,6 @@ class TestStringFormatter(unittest.TestCase):
         with self.assertRaises(namealizer.InvalidWordStyleError):
             namealizer.format_string("My big pizza", "copy")
 
-class TestRandomWordGrabber(unittest.TestCase):
-    """Verify the function that grabs words from the dictionary
-    """
-    pass
-
 
 class TestCommandLineParameters(unittest.TestCase):
     """Verifies command line parameters are handled correctly
