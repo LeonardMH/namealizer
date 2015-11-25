@@ -2,6 +2,7 @@
 
 [![Build Status](https://travis-ci.org/LeonardMH/namealizer.svg?branch=master)](https://travis-ci.org/LeonardMH/namealizer)
 [![Coverage Status](https://coveralls.io/repos/LeonardMH/namealizer/badge.svg?branch=master&service=github)](https://coveralls.io/github/LeonardMH/namealizer?branch=master)
+[![Code Climate](https://codeclimate.com/github/LeonardMH/namealizer/badges/gpa.svg)](https://codeclimate.com/github/LeonardMH/namealizer)
 
 The goal of namealizer is simple, to create a straightforward method
 for creating random collections of words. If nothing else it is always
