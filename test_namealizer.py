@@ -80,6 +80,13 @@ class TestDictionaryImport(unittest.TestCase):
         # verify that this dictionary has all the letters specified
         self.assertEqual(len(self.words_sparse), len(self.well_formatted_sparse))
 
+    def test_sparse_dict_access_unavailable_letter(self):
+        """Tests condition of dict not containing the desired letter"""
+        with self.assertRaises(namealizer.NoWordForLetter):
+            func = namealizer.get_random_word
+            dictionary = self.well_formatted_sparse
+            func(dictionary, starting_letter='c')
+
     def tearDown(self):
         # remove the dictionaries
         for dict_file in glob.glob("*.dict"):

@@ -21,6 +21,11 @@ class InvalidWordStyleError(Exception):
     """
     pass
 
+class NoWordForLetter(Exception):
+    """
+    Raised when dictionary has no word beginning with requested letter
+    """
+    pass
 
 def format_word_list_lowercase(word_list):
     """
@@ -100,7 +105,13 @@ def get_random_word(dictionary, starting_letter=None):
     if starting_letter is None:
         starting_letter = random.choice(list(dictionary.keys()))
 
-    return random.choice(dictionary[starting_letter])
+    try:
+        to_return = random.choice(dictionary[starting_letter])
+    except KeyError:
+        msg = "Dictionary does not contain a word starting with '{}'"
+        raise NoWordForLetter(msg.format(starting_letter))
+
+    return to_return
 
 
 def import_dictionary(opened_file):
