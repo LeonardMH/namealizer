@@ -124,58 +124,88 @@ def get_random_word(dictionary, starting_letter=None):
     return to_return
 
 
-def import_dictionary(opened_file):
+def import_dictionary(dictionary):
     """
     Function used to import the dictionary file into memory
     opened_file should be an already opened dictionary file
+
+    :raises DictionaryNotFoundError if dictionary can't be loaded
     """
-    # create the dictionary to hold the words
-    dictionary = dict()
-    for line in opened_file:
-        try:
-            dictionary[line[0].lower()].append(line.strip().lower())
-        except KeyError:
-            dictionary[line[0].lower()] = list(line.strip().lower())
+    def load_into_dictionary(dictionary_file):
+        """create the dictionary to hold the words"""
+        to_return = dict()
+        for line in dictionary_file:
+            try:
+                to_return[line[0].lower()].append(line.strip().lower())
+            except KeyError:
+                to_return[line[0].lower()] = list(line.strip().lower())
 
-    return dictionary
+        return to_return
+
+    try:
+        with open(dictionary) as dictionary_file:
+            to_return = load_into_dictionary(dictionary_file)
+
+    except TypeError:
+        to_return = load_into_dictionary(dictionary)
+
+    except IOError:
+        message = "Could not find the dictionary at {}".format(dictionary)
+        raise DictionaryNotFoundError(message)
+
+    return to_return
 
 
-def main(dictionary='dictionaries/all_en_US.dict', count=None, initials=None,
-         seed=None, wordstyle='lowercase', separator=' '):
-    # Generate seed for random number generator
+def string_for_initials(dictionary, initials):
+    """Create a random string of words of len(initials)"""
+    string_to_print = ""
+    for letter in initials:
+        word = get_random_word(dictionary, letter.lower())
+        string_to_print += "{} ".format(word)
+
+    return string_to_print
+
+
+def string_for_count(dictionary, count):
+    """Create a random string of N=`count` words"""
+    string_to_print = ""
+    if count is not None:
+        if count == 0:
+            return ""
+        ranger = count
+    else:
+        ranger = 2
+    for index in range(ranger):
+        string_to_print += "{} ".format(get_random_word(dictionary))
+
+    return string_to_print
+
+
+def generate_seed(seed):
+    """Generate seed for random number generator"""
     if seed is None:
         random.seed()
         seed = random.randint(0, sys.maxsize)
     random.seed(a=seed)
 
+
+def main(dictionary='dictionaries/all_en_US.dict', count=None, initials=None,
+         seed=None, wordstyle='lowercase', separator=' '):
+    """Main processing function for namealizer"""
+    generate_seed(seed)
+
     # attempt to read in the given dictionary
-    try:
-        with open(dictionary) as dictionary_file:
-            dictionary = import_dictionary(dictionary_file)
-    except IOError:
-        message = "Could not find the dictionary at {}".format(dictionary)
-        raise DictionaryNotFoundError(message)
+    dictionary = import_dictionary(dictionary)
 
     # if count and initials are both set, let the user know what's up
-    if count is not None and initials is not None:
+    if count and initials:
         msg = "--count and --initials are mutually exclusive, using initials"
         logging.info(msg)
 
-    string_to_print = ""
     if initials is not None:
-        for letter in initials:
-            word = get_random_word(dictionary, letter.lower())
-            string_to_print += "{} ".format(word)
-
+        string_to_print = string_for_initials(dictionary, initials)
     else:
-        if count is not None:
-            if count == 0:
-                return ""
-            ranger = count
-        else:
-            ranger = 2
-        for index in range(ranger):
-            string_to_print += "{} ".format(get_random_word(dictionary))
+        string_to_print = string_for_count(dictionary, count)
 
     return format_string(string_to_print.strip(), wordstyle, separator)
 
