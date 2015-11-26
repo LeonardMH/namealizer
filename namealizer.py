@@ -20,11 +20,13 @@ class InvalidWordStyleError(Exception):
     """
     pass
 
+
 class NoWordForLetter(Exception):
     """
     Raised when dictionary has no word beginning with requested letter
     """
     pass
+
 
 def format_word_list_lowercase(word_list):
     """
@@ -154,7 +156,7 @@ def main(dictionary='dictionaries/all_en_US.dict', count=None, initials=None,
         message = "Could not find the dictionary at {}".format(dictionary)
         raise DictionaryNotFoundError(message)
 
-    # If count and initials are set at the same time let the user know that's a no-no
+    # if count and initials are both set, let the user know what's up
     if count is not None and initials is not None:
         msg = "--count and --initials are mutually exclusive, using initials"
         logging.info(msg)
@@ -162,7 +164,8 @@ def main(dictionary='dictionaries/all_en_US.dict', count=None, initials=None,
     string_to_print = ""
     if initials is not None:
         for letter in initials:
-            string_to_print += "{} ".format(get_random_word(dictionary, letter.lower()))
+            word = get_random_word(dictionary, letter.lower())
+            string_to_print += "{} ".format(word)
 
     else:
         if count is not None:
@@ -175,6 +178,7 @@ def main(dictionary='dictionaries/all_en_US.dict', count=None, initials=None,
             string_to_print += "{} ".format(get_random_word(dictionary))
 
     return format_string(string_to_print.strip(), wordstyle, separator)
+
 
 def create_parser():
     """Creates the Namespace object to be used by the rest of the tool"""
@@ -189,11 +193,11 @@ def create_parser():
                         type=int)
     parser.add_argument('-i', '--initials',
                         type=str,
-                        help='Give a string of letters to form the word list from')
+                        help='String of letters used to form the word list')
     parser.add_argument('-s', '--seed',
-                        help='Specify the seed to use for the random number generator. '
-                        'Using the same seed without changing other settings will give '
-                        'repeatable results.',
+                        help='Specify the seed to use for the random number '
+                        'generator. Using the same seed without changing '
+                        'other settings will give repeatable results.',
                         type=int)
     parser.add_argument('-ws', '--wordstyle',
                         nargs='?',
@@ -205,7 +209,7 @@ def create_parser():
                         nargs='?',
                         default=' ',
                         type=str,
-                        help='What to use to separate words. Default is space.')
+                        help='How to separate words. Default is space.')
 
     return parser.parse_args()
 

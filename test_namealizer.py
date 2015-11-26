@@ -51,12 +51,14 @@ class TestDictionaryImport(unittest.TestCase):
         # create and import the well formatted full dictionary
         write_dictionary(self.well_formatted_all, self.words_all)
         with open(self.well_formatted_all, "r") as dictionary_file:
-            self.well_formatted_all = namealizer.import_dictionary(dictionary_file)
+            imported = namealizer.import_dictionary(dictionary_file)
+            self.well_formatted_all = imported
 
         # create and import the well formatted sparse dictionary
         write_dictionary(self.well_formatted_sparse, self.words_sparse)
         with open(self.well_formatted_sparse, "r") as dictionary_file:
-            self.well_formatted_sparse = namealizer.import_dictionary(dictionary_file)
+            imported = namealizer.import_dictionary(dictionary_file)
+            self.well_formatted_sparse = imported
 
     def test_import_well_formatted_all_letters(self):
         # first just make sure it is a dictionary
@@ -78,7 +80,9 @@ class TestDictionaryImport(unittest.TestCase):
             self.assertIsInstance(value, list)
 
         # verify that this dictionary has all the letters specified
-        self.assertEqual(len(self.words_sparse), len(self.well_formatted_sparse))
+        len_all = len(self.words_sparse)
+        len_sparse = len(self.well_formatted_sparse)
+        self.assertEqual(len_all, len_sparse)
 
     def test_sparse_dict_access_unavailable_letter(self):
         """Tests condition of dict not containing the desired letter"""
@@ -198,12 +202,14 @@ class TestActualUsage(unittest.TestCase):
     def test_with_various_count_arguments(self):
         # verify that we can return up to a certain number of words
         for test in range(6):
+            result = namealizer.main(count=test)
             if test == 0:
-                # this test has to be special cased because splitting on spaces means that even an empty string
-                # will have a length of 1.
-                self.assertEqual("", namealizer.main(count=test))
+                # this test has to be special cased because splitting
+                # on spaces means that even an empty string will have a
+                # length of 1.
+                self.assertEqual("", result)
             else:
-                self.assertEqual(test, len(namealizer.main(count=test).split(" ")))
+                self.assertEqual(test, len(result.split(" ")))
 
     def test_with_various_initials(self):
         # check the case where initials is passed in as an empty string
@@ -217,8 +223,8 @@ class TestActualUsage(unittest.TestCase):
             for _ in range(num_initials):
                 initials += random.choice(string.ascii_letters)
 
-            self.assertEqual(num_initials,
-                             len(namealizer.main(initials=initials).split(" ")))
+            result = namealizer.main(initials=initials).split(" ")
+            self.assertEqual(num_initials, len(result))
 
     def test_seed_option(self):
         # perform a couple of tests and ensure that given everything
@@ -232,7 +238,8 @@ class TestActualUsage(unittest.TestCase):
 
         # test for 10 random seeds
         for _ in range(10):
-            self.assertTrue(are_two_seed_runs_equal(random.randint(1, sys.maxsize)))
+            seed = random.randint(1, sys.maxsize)
+            self.assertTrue(are_two_seed_runs_equal(seed))
 
     def test_count_and_initials_both_defined(self):
         """If count and initials are passed to main, initials are used"""
