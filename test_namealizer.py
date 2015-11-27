@@ -71,6 +71,10 @@ class TestDictionaryImport(unittest.TestCase):
         # verify that this dictionary has all 26 letters specified
         self.assertEqual(len(self.words_all), len(self.well_formatted_all))
 
+        # check that the first word in a `letter group` got imported in whole
+        # this is a test for issue #17
+        self.assertEqual(self.words_all[0], self.well_formatted_all["a"][0])
+
     def test_import_well_formatted_sparse(self):
         # first just make sure it is a dictionary
         self.assertIsInstance(self.well_formatted_all, dict)
@@ -83,6 +87,10 @@ class TestDictionaryImport(unittest.TestCase):
         len_all = len(self.words_sparse)
         len_sparse = len(self.well_formatted_sparse)
         self.assertEqual(len_all, len_sparse)
+
+        # check that the first word in a `letter group` got imported in whole
+        # this is a test for issue #17
+        self.assertEqual(self.words_all[0], self.well_formatted_all["a"][0])
 
     def test_sparse_dict_access_unavailable_letter(self):
         """Tests condition of dict not containing the desired letter"""

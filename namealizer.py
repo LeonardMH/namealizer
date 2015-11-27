@@ -138,7 +138,7 @@ def import_dictionary(dictionary):
             try:
                 to_return[line[0].lower()].append(line.strip().lower())
             except KeyError:
-                to_return[line[0].lower()] = list(line.strip().lower())
+                to_return[line[0].lower()] = [line.strip().lower()]
 
         return to_return
 
