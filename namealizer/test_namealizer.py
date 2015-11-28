@@ -71,6 +71,7 @@ class TestWordGenerator(unittest.TestCase):
         with self.assertRaises(TypeError):
             wg[None]
 
+
 class TestDictionaryImport(unittest.TestCase):
     """
     Test the ability of the tool to import dictionaries. This tests

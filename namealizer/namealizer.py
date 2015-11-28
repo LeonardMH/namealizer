@@ -1,4 +1,5 @@
 """Create and format random collections of words"""
+from pkg_resources import resource_filename
 import argparse
 import sys
 import random
@@ -30,7 +31,8 @@ class NoWordForLetter(Exception):
 class WordGenerator(object):
     """Main word generation class"""
     def __init__(self,
-                 dictionary, wordstyle="lowercase", separator=" ",
+                 dictionary="dictionaries/all_en_US.dict",
+                 wordstyle="lowercase", separator=" ",
                  seed=None):
         """Initializer for WordGenerator
 
@@ -47,6 +49,12 @@ class WordGenerator(object):
                 where the starting letter given does not exist in the
                 dictionary
         """
+        if dictionary == "dictionaries/all_en_US.dict":
+            try:
+                dictionary = resource_filename('namealizer', dictionary)
+            except ImportError:
+                pass
+
         self.dictionary = import_dictionary(dictionary)
         self.wordstyle = wordstyle
         self.separator = separator
@@ -281,13 +289,3 @@ def create_parser():
                         help='How to separate words. Default is space.')
 
     return parser.parse_args()
-
-if __name__ == '__main__':
-    # Parse the input arguments
-    args = create_parser()
-    print(main(dictionary=args.dictionary,
-               count=args.count,
-               initials=args.initials,
-               seed=args.seed,
-               wordstyle=args.wordstyle,
-               separator=args.separator))

@@ -1,0 +1,17 @@
+#!/usr/local/bin/python
+from namealizer import create_parser, main
+from pkg_resources import resource_filename
+
+# Parse the input arguments
+args = create_parser()
+if args.dictionary == "dictionaries/all_en_US.dict":
+    args.dictionary = resource_filename('namealizer', "dictionaries/all_en_US.dict")
+
+result = main(dictionary=args.dictionary,
+              count=args.count,
+              initials=args.initials,
+              seed=args.seed,
+              wordstyle=args.wordstyle,
+              separator=args.separator)
+
+print(result)

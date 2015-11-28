@@ -8,6 +8,8 @@ python:
 install:
     - pip install coverage==4.0.2
 script:
-    coverage run --source=namealizer --branch test_namealizer.py
+    cd namealizer
+    coverage run --branch --source=namealizer.py test_namealizer.py
+    cd ..
 after_success:
     - coveralls

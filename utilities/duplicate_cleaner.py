@@ -4,6 +4,7 @@ import argparse
 sys.path.append('../')
 import namealizer
 
+
 def main(dict_path, stat_path):
     dictionary = namealizer.import_dictionary(dict_path)
     sorted_words = []
