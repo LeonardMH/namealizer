@@ -170,9 +170,9 @@ Where `<wordstyle>` is one of the following:
 - "lowercase" - **Default**. Example: "this is lowercase"
 - "uppercase" - Example: "THIS IS UPPERCASE"
 - "mixedcase" - Example: "this Is Mixed Case"
-- "captalize" - Example: "This Is Capitalize"
+- "capitalize" - Example: "This Is Capitalize"
 
-Changing the separator is much the same and is done by:
+Changing the separator is much the same, and is done by:
 
     wg.separator = <separator>
 
