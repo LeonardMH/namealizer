@@ -1,4 +1,4 @@
-# namealizer - A random name generator
+# namealizer - A random word generator
 
 [![Build Status](https://travis-ci.org/LeonardMH/namealizer.svg?branch=master)](https://travis-ci.org/LeonardMH/namealizer)
 [![Coverage Status](https://coveralls.io/repos/LeonardMH/namealizer/badge.svg?branch=master&service=github)](https://coveralls.io/github/LeonardMH/namealizer?branch=master)
@@ -13,8 +13,6 @@
 The goal of namealizer is simple, to create a straightforward method
 for creating random collections of words. If nothing else it is always
 entertaining to see a few random words thrown together.
-
-**If you are using namealizer feel free to let me know what for!**
 
 The dictionary included with namealizer was compiled from various
 sources with the main dictionary being the en\_US dictionary used in
@@ -37,7 +35,7 @@ Importing as a module should still work correctly though.
 The concept of namealizer is fairly straightforward, in the simplest use
 case namealizer just returns two random words from the dictionary.
 
-	Input: python namealizer
+	Input: namealizer
 	Output: forest kite
 
 ### Long-format options
@@ -46,20 +44,20 @@ Adding a little bit of complexity, the user can supply a number, this
 is the number of words that will be returned by namealizer. Once again,
 each randomly selected from the dictionary.
 
-	Input: python namealizer --count=5
+	Input: namealizer --count=5
 	Output: red barracuda car showstopper pillow
 
 For more advanced usage the user can input initials and namealizer will
 return a collection of words in order of the initials. In addition, the
 words can be returned in various formats.
 
-	Input: python namealizer --initials=CXM --seed=3008
+	Input: namealizer --initials=CXM --seed=3008
 	Output: crossing xylophone maid
 	
-	Input: python namealizer --initials=CXM --seed=3008 --wordstyle=capitalize --separator=""
+	Input: namealizer --initials=CXM --seed=3008 --wordstyle=capitalize --separator=""
 	Output CrossingXylophoneMaid
 	
-	Input: python namealizer --initials=CXM --seed=3008 --wordstyle=mixedcase --separator=""
+	Input: namealizer --initials=CXM --seed=3008 --wordstyle=mixedcase --separator=""
 	Output crossingXylophoneMaid
 
 	Input: namealizer --initials=CXM --seed=3008 --separator="-"
@@ -113,12 +111,13 @@ so you aren't restricted to single characters.
 ### Formatting options
 
 The formatting options allowed by the `--wordstyle` and `--separator`
-are essentially endless. You can do `CamelCase` with: `python namealizer
+are essentially endless. You can do `CamelCase` with: `namealizer
 --wordstyle=capitalize --separator=""` or perform the classic [Lil' John
-Transform](https://www.youtube.com/watch?v=GxBSyx85Kp8) with `python
-namealizer --wordstyle=uppercase --separator=" YEAH! "`
+Transform](https://www.youtube.com/watch?v=GxBSyx85Kp8) with `namealizer
+--wordstyle=uppercase --separator=" YEAH! "`
 
 The full list of options allowed as wordstyles are:
+
 - lowercase - "every word is lowercase"
 - uppercase - "EVERY WORD IS UPPERCASE"
 - capitalize - Each Word Is Capitalized"
@@ -139,11 +138,13 @@ The remaining examples in this section will assume that you have
 performed the following steps:
 
     import namealizer
-    wg = namealizer.WordGenerator("dictionaries/all_en_US.dict")
+    wg = namealizer.WordGenerator()
 
 This creates a new `WordGenerator` object with a default separator of `" "`
-a default wordstyle of `lowercase` and a randomly selected PRNG seed.
-If the dictionary provided cannot be found, this will raise the
+a default wordstyle of `lowercase` and a randomly selected PRNG seed. You
+can also optionally provide the path to a dictionary as the first parameter,
+if none is provided then the default dictionary will be used. If the
+dictionary provided cannot be found, this will raise the
 `namealizer.DictionaryNotFoundError`.
 
 ### Retrieving Words
@@ -154,17 +155,16 @@ methods use the dictionary access method to decide what to do.
 
 - `wg["abc"]` - Returns three words where the starting letter of each
 word is given by the letter corresponding to that word's position.
-This is functionally equivalent to the command line options: `python
-namealizer.py --initials="abc"`. The separator and wordstyle used will
-be whatever is currently set as the current separator and wordstyle for
-this `WordGenerator` object. This is referred to as the "string access
-method".
+This is functionally equivalent to the command line options: `namealizer
+--initials="abc"`. The separator and wordstyle used will be whatever is
+currently set as the current separator and wordstyle for this
+`WordGenerator` object. This is referred to as the "string access method".
 - `wg[3]` - Returns three words where the starting letter of each word
 is randomly determined. This is functionally equivalent to the command
-line options: `python namealizer.py --count=3`. The separator and
-wordstyle used will be whatever is currently set as the separator and
-wordstyle for this `WordGenerator` object. This is referred to as the
-"integer access method"
+line options: `namealizer --count=3`. The separator and wordstyle
+used will be whatever is currently set as the separator and wordstyle
+for this `WordGenerator` object. This is referred to as the "integer
+access method"
 
 When using the *integer access method* if there is not a word in
 the dictionary which can satisfy the starting letter requested,
@@ -200,3 +200,5 @@ And finally, changing the seed is done by:
     wg.seed = <seed>
 
 Where `<seed>` is any valid integer.
+
+**If you are using namealizer feel free to let me know what for!**
