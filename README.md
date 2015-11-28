@@ -15,7 +15,7 @@ sources with the main dictionary being the en\_US dictionary used in
 Hunspell. The dictionary was mirrored on sourceforge at [Kevin's Word
 List Page](http://wordlist.sourceforge.net).
 
-## Examples
+## Command Line Use
 
 The concept of namealizer is fairly straightforward, in the simplest use
 case namealizer just returns two random words from the dictionary.
@@ -111,3 +111,75 @@ If you would like to see other wordstyles added [just file a request
 as an issue](https://github.com/LeonardMH/namealizer/issues/new)
 or implement it yourself and [create a pull
 request](https://github.com/LeonardMH/namealizer/compare)!
+
+## Use as a Module
+
+Namealizer is also well suited for use in your own Python tools by
+importing it as a module. The `namealizer.WordGenerator` class is
+provided which mirrors all of the functionality of the command line.
+
+The remaining examples in this section will assume that you have
+performed the following steps:
+
+    import namealizer
+    wg = namealizer.WordGenerator("dictionaries/all_en_US.dict")
+
+This creates a new `WordGenerator` object with a default separator of `" "`
+a default wordstyle of `lowercase` and a randomly selected PRNG seed.
+If the dictionary provided cannot be found, this will raise the
+`namealizer.DictionaryNotFoundError`.
+
+### Retrieving Words
+
+In keeping with the *dictionary* paradigm of accessing words there are
+two ways in which to retrieve random words from your dictionary. Both
+methods use the dictionary access method to decide what to do.
+
+- `wg["abc"]` - Returns three words where the starting letter of each
+word is given by the letter corresponding to that word's position.
+This is functionally equivalent to the command line options: `python
+namealizer.py --initials="abc"`. The separator and wordstyle used will
+be whatever is currently set as the current separator and wordstyle for
+this `WordGenerator` object. This is referred to as the "string access
+method".
+- `wg[3]` - Returns three words where the starting letter of each word
+is randomly determined. This is functionally equivalent to the command
+line options: `python namealizer.py --count=3`. The separator and
+wordstyle used will be whatever is currently set as the separator and
+wordstyle for this `WordGenerator` object. This is referred to as the
+"integer access method"
+
+When using the *integer access method* if there is not a word in
+the dictionary which can satisfy the starting letter requested,
+a `namealizer.NoWordForLetter` exception is raised. If anything
+other than a string (`str`) or integer (`int`) is used to access the
+`WordGenerator` a `TypeError` will be raised.
+
+### Changing Formatting Options
+
+The formatting options are the same as allowed from the command line.
+You can directly change wordstyle, separator, and seed options for the
+object by directly setting their related properties.
+
+To change the wordstyle just use:
+
+    wg.wordstyle = <wordstyle>
+
+Where `<wordstyle>` is one of the following:
+
+- "lowercase" - **Default**. Example: "this is lowercase"
+- "uppercase" - Example: "THIS IS UPPERCASE"
+- "mixedcase" - Example: "this Is Mixed Case"
+- "captalize" - Example: "This Is Capitalize"
+
+Changing the separator is much the same and is done by:
+
+    wg.separator = <separator>
+
+Where `<separator>` is any valid ascii character or control sequence.
+
+And finally, changing the seed is done by:
+
+    wg.seed = <seed>
+
+Where `<seed>` is any valid integer.
