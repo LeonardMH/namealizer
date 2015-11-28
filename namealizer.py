@@ -1,5 +1,4 @@
-"""Create and format random collections of words
-"""
+"""Create and format random collections of words"""
 import argparse
 import sys
 import random
@@ -27,6 +26,43 @@ class NoWordForLetter(Exception):
     """
     pass
 
+
+class WordGenerator(object):
+    """Main word generation class"""
+    def __init__(self,
+                 dictionary, wordstyle="lowercase", separator=" ",
+                 seed=None):
+        """Initializer for WordGenerator
+
+        :param dictionary Any valid .dict formatted dictionary
+        :param wordstyle Any allowed `wordstyle` format specification
+        :param separator What character (or word) to separate words with
+        :param seed Seed to use for the PRNG
+
+        :raises DictionaryNotFoundError if the `dictionary` parameter can't
+                be found on disk
+        :raises InvalidWordStyleError if user attempts to retrieve a word
+                when `self.wordstyle` is set to an invalid value
+        :raises NoWordForLetter when the user attempts to reteive a word
+                where the starting letter given does not exist in the
+                dictionary
+        """
+        self.dictionary = import_dictionary(dictionary)
+        self.wordstyle = wordstyle
+        self.separator = separator
+        self.seed = generate_seed(seed)
+
+    def __getitem__(self, key):
+        if isinstance(key, str):
+            return format_string(string_for_initials(self.dictionary, key),
+                                 wordstyle=self.wordstyle,
+                                 separator=self.separator)
+        elif isinstance(key, int):
+            return format_string(string_for_count(self.dictionary, key),
+                                 wordstyle=self.wordstyle,
+                                 separator=self.separator)
+        else:
+            raise TypeError
 
 def format_word_list_lowercase(word_list):
     """
@@ -163,7 +199,7 @@ def string_for_initials(dictionary, initials):
         word = get_random_word(dictionary, letter.lower())
         string_to_print += "{} ".format(word)
 
-    return string_to_print
+    return string_to_print.strip()
 
 
 def string_for_count(dictionary, count):
@@ -178,7 +214,7 @@ def string_for_count(dictionary, count):
     for index in range(ranger):
         string_to_print += "{} ".format(get_random_word(dictionary))
 
-    return string_to_print
+    return string_to_print.strip()
 
 
 def generate_seed(seed):
@@ -187,6 +223,8 @@ def generate_seed(seed):
         random.seed()
         seed = random.randint(0, sys.maxsize)
     random.seed(a=seed)
+
+    return seed
 
 
 def main(dictionary='dictionaries/all_en_US.dict', count=None, initials=None,
@@ -207,7 +245,7 @@ def main(dictionary='dictionaries/all_en_US.dict', count=None, initials=None,
     else:
         string_to_print = string_for_count(dictionary, count)
 
-    return format_string(string_to_print.strip(), wordstyle, separator)
+    return format_string(string_to_print, wordstyle, separator)
 
 
 def create_parser():
