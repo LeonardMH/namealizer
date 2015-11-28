@@ -64,6 +64,7 @@ class WordGenerator(object):
         else:
             raise TypeError
 
+
 def format_word_list_lowercase(word_list):
     """
     Given a list of words, this function returns a new list where all of
