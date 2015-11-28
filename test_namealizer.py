@@ -19,6 +19,58 @@ def are_two_seed_runs_equal(seed_to_use, **kwargs):
     return first == second
 
 
+class TestWordGenerator(unittest.TestCase):
+    """Test the WordGenerator class for expected operation"""
+    def test_default_initialization(self):
+        wg = namealizer.WordGenerator("dictionaries/all_en_US.dict")
+        self.assertEqual(wg.wordstyle, "lowercase")
+        self.assertEqual(wg.separator, " ")
+        self.assertIsInstance(wg.seed, int)
+
+    def test_valid_wordstyles(self):
+        wg = namealizer.WordGenerator("dictionaries/all_en_US.dict")
+        # test that these calls work, actual formatting is tested elsewhere
+        wg.wordstyle = "lowercase"
+        wg[3]
+
+        wg.wordstyle = "uppercase"
+        wg[3]
+
+        wg.wordstyle = "mixedcase"
+        wg[3]
+
+        wg.wordstyle = "capitalize"
+        wg[3]
+
+    def test_invalid_wordstyle(self):
+        wg = namealizer.WordGenerator("dictionaries/all_en_US.dict")
+        wg.wordstyle = "cookies"
+        with self.assertRaises(namealizer.InvalidWordStyleError):
+            wg[3]
+
+    def test_valid_separators(self):
+        wg = namealizer.WordGenerator("dictionaries/all_en_US.dict")
+        wg.separator = "-"
+        returned = wg[3]
+        self.assertEqual(len(returned.split(wg.separator)), 3)
+
+    def test_string_access_method(self):
+        wg = namealizer.WordGenerator("dictionaries/all_en_US.dict")
+        returned = wg["abc"].split()
+        self.assertEqual(returned[0][0], "a")
+        self.assertEqual(returned[1][0], "b")
+        self.assertEqual(returned[2][0], "c")
+
+    def test_count_access_method(self):
+        wg = namealizer.WordGenerator("dictionaries/all_en_US.dict")
+        returned = wg[3].split()
+        self.assertEqual(len(returned), 3)
+
+    def test_invalid_access_method(self):
+        wg = namealizer.WordGenerator("dictionaries/all_en_US.dict")
+        with self.assertRaises(TypeError):
+            wg[None]
+
 class TestDictionaryImport(unittest.TestCase):
     """
     Test the ability of the tool to import dictionaries. This tests
@@ -182,7 +234,7 @@ class TestStringFormatter(unittest.TestCase):
                                             separator)
             self.assertEqual(standard, test)
 
-    def test_invalid_word_style(self):
+    def test_invalid_wordstyle(self):
         with self.assertRaises(namealizer.InvalidWordStyleError):
             namealizer.format_string("My big pizza", "copy")
 
