@@ -5,3 +5,7 @@
 .coverage
 *,cover
 *.swp
+
+# pypi related files
+dist/
+*.egg-info*
