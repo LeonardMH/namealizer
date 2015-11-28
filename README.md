@@ -15,6 +15,17 @@ sources with the main dictionary being the en\_US dictionary used in
 Hunspell. The dictionary was mirrored on sourceforge at [Kevin's Word
 List Page](http://wordlist.sourceforge.net).
 
+## Installation
+
+The easiest install method is through pip with:
+
+    pip install namealizer
+
+This will get the latest released version of namealizer. If you'd
+like to clone from github and use the source files directly, I make
+no guarantees that the command line interface will work correctly.
+Importing as a module should still work correctly though.
+
 ## Command Line Use
 
 The concept of namealizer is fairly straightforward, in the simplest use
