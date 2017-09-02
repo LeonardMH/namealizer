@@ -7,7 +7,7 @@ python:
     - "3.6"
     - "nightly"
 install:
-    - pip install coverage
+    - pip install coverage coveralls
 script:
     cd namealizer
     coverage run --branch --source=namealizer test_namealizer.py
