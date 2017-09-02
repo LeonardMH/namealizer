@@ -1,5 +1,5 @@
 from setuptools import setup
-#package_dir={"namealizer": "namealizer"},
+
 setup(name="namealizer",
       packages=["namealizer"],
       version="0.6",

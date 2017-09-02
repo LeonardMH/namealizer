@@ -50,10 +50,7 @@ class WordGenerator(object):
                 dictionary
         """
         if dictionary == "dictionaries/all_en_US.dict":
-            try:
-                dictionary = resource_filename('namealizer', dictionary)
-            except ImportError:
-                pass
+            dictionary = resource_filename('namealizer', dictionary)
 
         self.dictionary = import_dictionary(dictionary)
         self.wordstyle = wordstyle
